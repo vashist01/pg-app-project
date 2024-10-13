@@ -1,5 +1,8 @@
 package com.kunj.config;
 
+import com.amazonaws.services.dynamodbv2.xspec.S;
+import com.kunj.util.AwsSecretManagerUtil;
+import java.util.Map;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +22,7 @@ public class PropertyConfig {
   private final String jwtSecretKey;
   private final String secretKey;
   private final long jwtExpiration;
-//  private final AwsSecretManagerUtil awsSecretManagerUtil;
+  private final AwsSecretManagerUtil awsSecretManagerUtil;
   private String activeProfile;
 
 
@@ -43,19 +46,20 @@ public class PropertyConfig {
       @Value("${security.jwt.secret-key}") String jwtSecretKey,
       @Value("${secret.key}") String secretKey,
       @Value("${security.jwt.expiration-time}") long jwtExpiration,
-      @Value("${spring.profiles.active}") String activeProfile) {
+      @Value("${spring.profiles.active}") String activeProfile,
+      AwsSecretManagerUtil awsSecretManagerUtil) {
 
-   // this.awsSecretManagerUtil = awsSecretManagerUtil1;
+
     this.verifyOtpTiemDuration = verifyOtpTimeDuration;
-//    Map<String, String> asmProperties = awsSecretManagerUtil1.getSecretByEnvironment(
-//        activeProfile);
+
+    this.awsSecretManagerUtil = awsSecretManagerUtil;
+    Map<String, String> asmProperties =  awsSecretManagerUtil.getSecretKeyByActiveEnvironment(
+       activeProfile);
     this.dnymoDbTableName = DynamoDBTableName;
-    // this.region = awsSecretManagerUtil1.getUpdatedSecretValueFromPropertyMap(asmProperties,secretKey);
-    // this.accessKey =awsSecretManagerUtil1.getUpdatedSecretValueFromPropertyMap(asmProperties,accessKey);
-    this.region = region;
-    this.accessKey = accessKey;
+     this.secretKey = awsSecretManagerUtil.getUpdatedSecretValueFromPropertyMap(asmProperties,secretKey);
+     this.accessKey =awsSecretManagerUtil.getUpdatedSecretValueFromPropertyMap(asmProperties,accessKey);
     this.jwtSecretKey = jwtSecretKey;
-    this.secretKey = secretKey;
     this.jwtExpiration = jwtExpiration;
+    this.region = region;
   }
 }
