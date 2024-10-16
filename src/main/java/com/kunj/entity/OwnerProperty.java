@@ -33,6 +33,8 @@ public class OwnerProperty {
   @Column(name = "owner_name")
   private String ownerName;
 
+  @JoinColumn(name = "flat_number")
+  private String flatNumber;
 
   @Column(name = "property_type")
   private String propertyType;

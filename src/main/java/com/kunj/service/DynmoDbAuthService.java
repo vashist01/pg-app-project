@@ -177,6 +177,7 @@ public class DynmoDbAuthService {
   private void putItemDataToDynamoDb(Map<String, AttributeValue> dynamoDbData,
       AmazonDynamoDB amazonDynamoDBClient,
       String dynamoDbAuthTableName) {
+
     PutItemRequest putItemRequest = new PutItemRequest().withItem(dynamoDbData)
         .withTableName(dynamoDbAuthTableName);
     amazonDynamoDBClient.putItem(putItemRequest);
@@ -184,7 +185,8 @@ public class DynmoDbAuthService {
 
   private boolean findExistDynamoTable(String dynamoDbAuthTableName) {
     ListTablesResult listTablesResult = dynamoDB.listTables();
-    return listTablesResult.getTableNames().contains(dynamoDbAuthTableName);
+    Boolean dynamoDbStatus =  listTablesResult.getTableNames().contains(dynamoDbAuthTableName);
+    return dynamoDbStatus;
   }
 
   /**

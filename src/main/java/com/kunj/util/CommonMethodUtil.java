@@ -5,8 +5,11 @@ import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.AttributeValueUpdate;
 import com.kunj.entity.User;
 import com.kunj.entity.UserAuthToken;
+import com.kunj.repository.UserAuthTokenRepository;
+import com.kunj.repository.UserRepository;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 import org.springframework.stereotype.Component;
 
@@ -71,12 +74,16 @@ public class CommonMethodUtil {
   /**
    * Create auth token user auth token.
    *
-   * @param token the token
-   * @param user  the user
+   * @param token          the token
+   * @param user           the user
+   * @param userAuthTokenRepository
    * @return the user auth token
    */
-  public static UserAuthToken createAuthToken(String token, User user) {
-    UserAuthToken userAuthToken = new UserAuthToken();
+  public static UserAuthToken createAuthToken(String token, User user,
+      UserAuthTokenRepository userAuthTokenRepository) {
+    Optional<UserAuthToken> optionalUserAuthToken = userAuthTokenRepository.findByUserId(
+        user.getId());
+    UserAuthToken userAuthToken = optionalUserAuthToken.orElseGet(UserAuthToken::new);
     userAuthToken.setTokenExpireDate(DateConverterUtils.getExpireTokenWith12Hrs());
     userAuthToken.setTokenIssueDate(DateConverterUtils.getCurrentDateTime());
     userAuthToken.setToken(token);
@@ -84,13 +91,13 @@ public class CommonMethodUtil {
     return userAuthToken;
   }
 
-  /**
-   * Genrate 6 digit otp string.
-   *
-   * @return the string
-   */
-  public String genrate6DigitOtp() {
-    int otp = rnd.nextInt(999999);
-    return String.format("%06d", otp);
+    /**
+     * Genrate 6 digit otp string.
+     *
+     * @return the string
+     */
+    public String genrate6DigitOtp () {
+      int otp = rnd.nextInt(999999);
+      return String.format("%06d", otp);
+    }
   }
-}

@@ -30,7 +30,7 @@ public class AwsSecretManagerUtil {
     secretsManagerClient = SecretsManagerClient.builder()
         .region(Region.of("ap-south-1"))
         .credentialsProvider(StaticCredentialsProvider.create(
-            AwsBasicCredentials.create("AKIAVL7I4P37RUPAI3MY", "kCO1gtTEeyGE+ubXOBmUH+wXpnaOmWZmwinD1jyT")))
+            AwsBasicCredentials.create("AKIAYUQGTBT66UATXNWY", "8loku2QSPpkljtHIz1jemqqIAIM+26Vkh20bCo00")))
         .build();
   }
 

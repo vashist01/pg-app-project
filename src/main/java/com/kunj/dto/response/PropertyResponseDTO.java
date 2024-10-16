@@ -15,8 +15,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PropertyResponseDTO {
 
-  @JsonProperty("flat_name")
-  private String flatName;
+  @JsonProperty("flat_number")
+  private String flatNumber;
 
   private String location;
   private String address;

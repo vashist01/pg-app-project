@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
-
 public class UserDto {
 
   @JsonProperty("mobile_number")
@@ -13,10 +12,4 @@ public class UserDto {
   private String deviceSerialNumber;
   @JsonProperty("device_token")
   private String deviceToken;
-  private String role;
-  @JsonProperty("first_name")
-  private String firstName;
-  @JsonProperty("last_name")
-  private String lastName;
-  private String email;
 }

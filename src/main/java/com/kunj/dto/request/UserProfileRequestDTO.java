@@ -26,4 +26,11 @@ public class UserProfileRequestDTO {
   @JsonProperty("profile_image")
   private File profilePicture;
   private String address;
+  @JsonProperty("mobile_number")
+  private String mobileNumber;
+  @JsonProperty("device_serial_number")
+  private String deviceSerialNumber;
+  @JsonProperty("device_token")
+  private String deviceToken;
+  private String role;
 }

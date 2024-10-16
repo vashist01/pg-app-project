@@ -37,7 +37,6 @@ public class PropertyConfig {
    * @param secretKey             the secret key
    * @param jwtExpiration         the jwt expiration
    * @param activeProfile         the active profile
-   * @param awsSecretManagerUtil1 the aws secret manager util 1
    */
   public PropertyConfig(@Value("${verify.otp.time.duration}") final String verifyOtpTimeDuration,
       @Value("${dynamodb.table.name}") String DynamoDBTableName,
@@ -51,15 +50,15 @@ public class PropertyConfig {
 
 
     this.verifyOtpTiemDuration = verifyOtpTimeDuration;
-
     this.awsSecretManagerUtil = awsSecretManagerUtil;
     Map<String, String> asmProperties =  awsSecretManagerUtil.getSecretKeyByActiveEnvironment(
        activeProfile);
     this.dnymoDbTableName = DynamoDBTableName;
      this.secretKey = awsSecretManagerUtil.getUpdatedSecretValueFromPropertyMap(asmProperties,secretKey);
      this.accessKey =awsSecretManagerUtil.getUpdatedSecretValueFromPropertyMap(asmProperties,accessKey);
+
     this.jwtSecretKey = jwtSecretKey;
-    this.jwtExpiration = jwtExpiration;
     this.region = region;
+    this.jwtExpiration = jwtExpiration;
   }
 }
