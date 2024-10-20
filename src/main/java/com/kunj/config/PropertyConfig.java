@@ -1,9 +1,9 @@
 package com.kunj.config;
 
-import com.amazonaws.services.dynamodbv2.xspec.S;
 import com.kunj.util.AwsSecretManagerUtil;
 import java.util.Map;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @Data
+@Slf4j
 public class PropertyConfig {
 
   private final String verifyOtpTiemDuration;
@@ -51,9 +52,12 @@ public class PropertyConfig {
 
     this.verifyOtpTiemDuration = verifyOtpTimeDuration;
     this.awsSecretManagerUtil = awsSecretManagerUtil;
+    log.info(" secretKey for key {}:", secretKey);
+    log.info(" accessKey for key {}:", accessKey);
     Map<String, String> asmProperties =  awsSecretManagerUtil.getSecretKeyByActiveEnvironment(
        activeProfile);
     this.dnymoDbTableName = DynamoDBTableName;
+
      this.secretKey = awsSecretManagerUtil.getUpdatedSecretValueFromPropertyMap(asmProperties,secretKey);
      this.accessKey =awsSecretManagerUtil.getUpdatedSecretValueFromPropertyMap(asmProperties,accessKey);
 
