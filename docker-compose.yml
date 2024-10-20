@@ -9,8 +9,8 @@ services:
       - "8005:8005"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3308/pg_db?createDatabaseIfNotExist=true
-      SPRING_DATASOURCE_USERNAME: amdin
-      SPRING_DATASOURCE_PASSWORD: pg-admin
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: pg-service-db
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
     depends_on:
       - db
