@@ -5,8 +5,7 @@ phases:
       - echo Logging in to Amazon ECR....
       - aws --version
       #- $(aws ecr get-login --region ap-south-1 --no-include-email)
-      - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 593793060093.dkr.ecr.ap-south-1.amazonaws.com
-      - # Replace with this to your repository URI
+      - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 593793060093.dkr.ecr.ap-south-1.amazonaws.com      - # Replace with this to your repository URI
       - REPOSITORY_URI=593793060093.dkr.ecr.ap-south-1.amazonaws.com/pg-app
       - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
   build:
