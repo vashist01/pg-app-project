@@ -2,10 +2,8 @@ package com.kunj.exception;
 
 import com.kunj.exception.custome.BadCredentialsException;
 import com.kunj.exception.custome.BadRequestException;
-import com.kunj.exception.custome.InValidMobileNumberException;
-import com.kunj.exception.custome.InvalidAuthHeaderException;
+import com.kunj.exception.custome.InvalidException;
 import com.kunj.exception.custome.InvalidOtpException;
-import jakarta.servlet.http.HttpServletRequest;
 import java.util.Date;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
@@ -86,40 +84,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         HttpStatus.BAD_REQUEST);
   }
 
-  /**
-   * Handle in valid mobile number exception response entity.
-   *
-   * @param exception          the exception
-   * @param httpServletRequest the http servlet request
-   * @return the response entity
-   */
-  @ExceptionHandler(Exception.class)
-  public ResponseEntity<ApiErrorMessageResponse> handleInValidMobileNumberException(
-      Exception exception,
-      HttpServletRequest httpServletRequest) {
-    if (exception instanceof InValidMobileNumberException) {
-      InValidMobileNumberException inValidMobileNumberException = (InValidMobileNumberException) exception;
-      return getException(inValidMobileNumberException.getErrorMessage(),
-          inValidMobileNumberException.getErrorCode());
-    } else if (exception instanceof NoDataFoundException) {
-      NoDataFoundException noDataFoundException = (NoDataFoundException) exception;
-      return getException(noDataFoundException.getErrorMessage(),
-          noDataFoundException.getErrorCode());
-    } else if (exception instanceof InvalidAuthHeaderException) {
-      InvalidAuthHeaderException invalidAuthHeaderException = (InvalidAuthHeaderException) exception;
-      return getException(invalidAuthHeaderException.getErrorMessage(),
-          invalidAuthHeaderException.getErrorCode());
-    }
-
-    return null;
-  }
-
-  private ResponseEntity<ApiErrorMessageResponse> getException(String errorMessage,
-      String errorCode) {
-    return new ResponseEntity<>(ApiErrorMessageResponse.builder()
-        .errorMessage(errorMessage)
-        .errorCode(errorCode).status("false")
-        .errorLogDateTime(new Date())
-        .build(), HttpStatus.BAD_REQUEST);
+  @ExceptionHandler(InvalidException.class)
+  public ResponseEntity<ApiErrorMessageResponse> invalidException(
+      InvalidException invalidException, WebRequest webRequest) {
+    return new ResponseEntity<>(
+        ApiErrorMessageResponse.builder().errorMessage(invalidException.getErrorMessage())
+            .errorCode(
+                invalidException.getErrorCode()).errorLogDateTime(new Date()).build(),
+        HttpStatus.BAD_REQUEST);
   }
 }

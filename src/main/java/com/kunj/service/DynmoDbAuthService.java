@@ -12,7 +12,6 @@ import com.amazonaws.services.dynamodbv2.model.AttributeValueUpdate;
 import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
 import com.amazonaws.services.dynamodbv2.model.KeySchemaElement;
 import com.amazonaws.services.dynamodbv2.model.KeyType;
-import com.amazonaws.services.dynamodbv2.model.ListTablesResult;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.amazonaws.services.dynamodbv2.model.PutItemRequest;
 import com.amazonaws.services.dynamodbv2.model.QueryRequest;
@@ -165,12 +164,8 @@ public class DynmoDbAuthService {
         .withCredentials(new AWSStaticCredentialsProvider(awsCredentials()))
         .withRegion(propertiesConfig.getRegion()).build();
     if (!CollectionUtils.isEmpty(dynamoDbData) && StringUtils.hasLength(dynamoDbAuthTableName)) {
-      if (findExistDynamoTable(dynamoDbAuthTableName)) {
         putItemDataToDynamoDb(dynamoDbData, amazonDynamoDBClient, dynamoDbAuthTableName);
         log.info("Data inserted successfully. {}", dynamoDbData);
-        return;
-      }
-      createDynamoDbTable(dynamoDbAuthTableName);
     }
   }
 
@@ -181,12 +176,6 @@ public class DynmoDbAuthService {
     PutItemRequest putItemRequest = new PutItemRequest().withItem(dynamoDbData)
         .withTableName(dynamoDbAuthTableName);
     amazonDynamoDBClient.putItem(putItemRequest);
-  }
-
-  private boolean findExistDynamoTable(String dynamoDbAuthTableName) {
-    ListTablesResult listTablesResult = dynamoDB.listTables();
-    Boolean dynamoDbStatus =  listTablesResult.getTableNames().contains(dynamoDbAuthTableName);
-    return dynamoDbStatus;
   }
 
   /**

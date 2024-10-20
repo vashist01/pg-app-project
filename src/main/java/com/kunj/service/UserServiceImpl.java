@@ -121,10 +121,6 @@ public class UserServiceImpl implements UserService {
         .readDataFromDynamoDbByMobileNumber(mobileNumberAndDynamoDbTable.getLeft(),
             mobileNumberAndDynamoDbTable.getRight());
 
-    //isUserAlreadyRegistered(readDynamoDbData,mobileNumber);
-
-    boolean isTokenValid = tokenValidatorComponent.validateTokenExpireWithDymaodb(readDynamoDbData);
-
     String token = jwtTokenAuthService.genrateToken(mobileNumber, TOKEN_EXPIRE_DATE);
     Optional<User> userOptional = userRepository.findByMobileNumber(mobileNumber);
 

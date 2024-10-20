@@ -37,7 +37,7 @@ public class UserAuthenticationController {
    * @return the response entity
    */
   @PostMapping(ApiEnum.LOGIN)
-  public ResponseEntity<UserResponse> registerUser(@RequestBody @Valid UserDto userDto) {
+  public ResponseEntity<UserResponse> login(@RequestBody @Valid UserDto userDto) {
     return new ResponseEntity<>(userService.login(userDto), HttpStatus.OK);
   }
 }
