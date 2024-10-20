@@ -29,6 +29,10 @@ public class AwsSecretManagerUtil {
   public AwsSecretManagerUtil(@Value("${aws.region:ap-south-1}") String region
       , @Value("${access.key}") String accessKey,
       @Value("${secret.key}") String secretKey) {
+
+    log.info(" secretKey for key {}:", secretKey);
+    log.info(" accessKey for key {}:", accessKey);
+
     secretsManagerClient = SecretsManagerClient.builder()
         .region(Region.of(region))
         .credentialsProvider(StaticCredentialsProvider.create(
