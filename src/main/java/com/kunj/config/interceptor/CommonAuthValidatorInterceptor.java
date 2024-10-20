@@ -62,7 +62,7 @@ public class CommonAuthValidatorInterceptor implements HandlerInterceptor {
 
     String authHeader = request.getHeader(ConstantEnums.AUTHORIZATION.getValue());
     String deviceSerialNumber = request.getHeader(ConstantEnums.DEVICE_SERIAL.getValue());
-    String requestUri = request.getRequestURI();
+
     validateAuthHeader(authHeader);
 
     if (StringUtils.hasLength(authHeader) && authHeader.startsWith(
@@ -127,7 +127,7 @@ public class CommonAuthValidatorInterceptor implements HandlerInterceptor {
 
   private UserData readUserDataFromDynamoDb(List<Map<String, AttributeValue>> readDynamoDbData) {
     UserData userData = new UserData();
-     readDynamoDbData.stream().forEach(attributeValueMap -> {
+     readDynamoDbData.forEach(attributeValueMap -> {
        userData.setId(Long.valueOf(attributeValueMap.get("user_id").getS()));
        userData.setMobileNumber(attributeValueMap.get(ConstantEnums.MOBILE_NUMBER.getValue()).getS());
        userData.setRole(attributeValueMap.get("role").getS());

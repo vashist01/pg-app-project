@@ -15,7 +15,7 @@ public interface PropertyService {
    * @param propertyRequestDTO the property request dto
    * @return the list
    */
-  List<PropertyResponseDTO> addPropertyResponse(PropertyRequestDTO propertyRequestDTO);
+  List<PropertyResponseDTO> addProperty(PropertyRequestDTO propertyRequestDTO);
 
   /**
    * Gets properties by owner.

@@ -56,7 +56,10 @@ public enum ConstantEnums {
   /**
    * Properties prefix for secret manager constant enums.
    */
-  PROPERTIES_PREFIX_FOR_SECRET_MANAGER("local-pg-app-key");
+  PROPERTIES_PREFIX_FOR_SECRET_MANAGER("SECRET-KEY"),
+  SUCCESSFULLY_REGISTER("sucessfully register")
+
+  ;
   private final String value;
 
   ConstantEnums(String value) {

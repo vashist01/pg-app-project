@@ -1,12 +1,12 @@
 services:
   app:
-    image: kunj:latest
+    image: pg-app-project:latest
     build:
       context: .
       dockerfile: ./Dockerfile
-    container_name: kunj
+    container_name: pg-app-project
     ports:
-      - "8001:8001"
+      - "8005:8005"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/pg_db?createDatabaseIfNotExist=true
       SPRING_DATASOURCE_USERNAME: root

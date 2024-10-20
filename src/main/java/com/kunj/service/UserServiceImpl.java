@@ -3,6 +3,7 @@ package com.kunj.service;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.kunj.config.PropertyConfig;
 import com.kunj.dto.request.UserDto;
+import com.kunj.dto.request.UserProfileRequestDTO;
 import com.kunj.dto.request.VerifyOtpDto;
 import com.kunj.dto.response.UserResponse;
 import com.kunj.entity.Otp;
@@ -10,6 +11,7 @@ import com.kunj.entity.User;
 import com.kunj.entity.UserAuthToken;
 import com.kunj.enums.ValidationEnum;
 import com.kunj.exception.NoDataFoundException;
+import com.kunj.exception.custome.InValidMobileNumberException;
 import com.kunj.repository.OtpRepository;
 import com.kunj.repository.UserAuthTokenRepository;
 import com.kunj.repository.UserProfileRepository;
@@ -27,6 +29,7 @@ import java.util.Map;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.internal.Pair;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -50,6 +53,7 @@ public class UserServiceImpl implements UserService {
   private final OtpService otpService;
   private final OtpRepository otpRepository;
   private final PropertyService propertyService;
+  private final UserProfileService userProfileService;
   private Date TOKEN_EXPIRE_DATE = new Date(System.currentTimeMillis() + 1000 * 60 * 10);
 
   /**
@@ -75,7 +79,7 @@ public class UserServiceImpl implements UserService {
       TokenValidatorComponent tokenValidatorComponent,
       JwtTokenAuthService jwtTokenAuthService1, UserProfileRequestScop userProfileRequestScop, OtpService otpService,
       OtpRepository otpRepository1, PropertyService propertyService,
-      UserProfileRepository userProfileRepository) {
+      UserProfileRepository userProfileRepository, UserProfileService userProfileService) {
     this.userRepository = userRepository;
 
     this.userAuthTokenRepository = userAuthTokenRepository;
@@ -89,6 +93,7 @@ public class UserServiceImpl implements UserService {
     this.otpService = otpService;
     this.otpRepository = otpRepository1;
     this.propertyService = propertyService;
+    this.userProfileService = userProfileService;
   }
 
   /**
@@ -116,23 +121,14 @@ public class UserServiceImpl implements UserService {
         .readDataFromDynamoDbByMobileNumber(mobileNumberAndDynamoDbTable.getLeft(),
             mobileNumberAndDynamoDbTable.getRight());
 
-    //isUserAlreadyRegistered(readDynamoDbData,mobileNumber);
-
-    boolean isTokenValid = tokenValidatorComponent.validateTokenExpireWithDymaodb(readDynamoDbData);
-
     String token = jwtTokenAuthService.genrateToken(mobileNumber, TOKEN_EXPIRE_DATE);
     Optional<User> userOptional = userRepository.findByMobileNumber(mobileNumber);
 
-    if (userOptional.isEmpty()) {
+    if (userOptional.isPresent()) {
       log.info("User login method is being executed for mobile number: {}", userDto);
-      User user = User.builder().deviceSerialNumber(userDto.getDeviceSerialNumber())
-          .deviceToken(userDto.getDeviceToken()).mobileNumber(mobileNumber).role(userDto.getRole())
-          .createdAt(convertorUtil.convertLocalDateTimeToStanderdFormate()).createdBy(mobileNumber)
-          .build();
+      User user = userRepository.findByMobileNumber(userDto.getMobileNumber()).orElseThrow(() -> new InValidMobileNumberException("Invalid User Mobile Number","100200"));
+      UserAuthToken userAuthToken = CommonMethodUtil.createAuthToken(token, user,userAuthTokenRepository);
 
-      UserAuthToken userAuthToken = CommonMethodUtil.createAuthToken(token, user);
-
-      userRepository.save(user);
       userAuthTokenRepository.save(userAuthToken);
       Map<String, AttributeValue> dynamoDbData = CommonMethodUtil.mapUserDataToMap(user,
           userAuthToken);

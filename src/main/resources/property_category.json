@@ -1,7 +1,5 @@
 [
-  "flate",
+  "flat",
   "room",
-  "pg",
-  "house",
-  "shop"
+  "pg"
 ]

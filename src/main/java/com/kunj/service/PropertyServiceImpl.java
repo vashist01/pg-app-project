@@ -45,7 +45,7 @@ public class PropertyServiceImpl implements PropertyService {
    * @return
    */
   @Override
-  public List<PropertyResponseDTO> addPropertyResponse(PropertyRequestDTO propertyRequestDTO) {
+  public List<PropertyResponseDTO> addProperty(PropertyRequestDTO propertyRequestDTO) {
 
     log.info("add property details :{}  by User : {} ", propertyRequestDTO,
         userProfile.getMobileNumber());

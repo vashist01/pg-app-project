@@ -44,7 +44,7 @@ public class PropertyController {
   @PostMapping(ApiEnum.API_ADD_PROPERTY)
   public ResponseEntity<List<PropertyResponseDTO>> addProperty(
       @RequestBody PropertyRequestDTO propertyRequestDTO) {
-    List<PropertyResponseDTO> propertyResponseDTO = propertyService.addPropertyResponse(
+    List<PropertyResponseDTO> propertyResponseDTO = propertyService.addProperty(
         propertyRequestDTO);
     return new ResponseEntity<>(propertyResponseDTO, HttpStatus.OK);
   }
