@@ -33,6 +33,7 @@ public class JwtTokenAuthService {
    * @param propertiesConfig the properties config
    */
   public JwtTokenAuthService(PropertyConfig propertiesConfig) {
+    log.info("JwtTokenAuthService intialize service : {} ",propertiesConfig);
     this.propertiesConfig = propertiesConfig;
   }
 
