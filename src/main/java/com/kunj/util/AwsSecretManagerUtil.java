@@ -1,4 +1,3 @@
-
 package com.kunj.util;
 
 import com.google.gson.Gson;
@@ -8,6 +7,7 @@ import com.kunj.exception.custome.InvalidAuthHeaderException;
 import com.kunj.exception.custome.InvalidException;
 import java.lang.reflect.Type;
 import java.util.Collections;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -20,8 +20,6 @@ import software.amazon.awssdk.services.secretsmanager.model.GetSecretValueReques
 import software.amazon.awssdk.services.secretsmanager.model.GetSecretValueResponse;
 import software.amazon.awssdk.services.secretsmanager.model.SecretsManagerException;
 
-import java.util.Map;
-
 @Component
 @Slf4j
 public class AwsSecretManagerUtil {
@@ -30,7 +28,7 @@ public class AwsSecretManagerUtil {
 
   public AwsSecretManagerUtil(@Value("${aws.region:ap-south-1}") String region
       , @Value("${access.key}") String accessKey,
-       @Value("${secret.key}") String secretKey) {
+      @Value("${secret.key}") String secretKey) {
     secretsManagerClient = SecretsManagerClient.builder()
         .region(Region.of(region))
         .credentialsProvider(StaticCredentialsProvider.create(
@@ -39,7 +37,7 @@ public class AwsSecretManagerUtil {
   }
 
   public Map<String, String> getSecretKeyByActiveEnvironment(String activeProfile) {
-
+    log.info(" activeProfile for key {}:", activeProfile);
     String secretKeyJson = getSecretKey(
         activeProfile.concat(AwsCredentialsStringConstant.SECRET_KEY_POST_VALUE.getValue()));
 
@@ -48,11 +46,13 @@ public class AwsSecretManagerUtil {
       return Collections.emptyMap();
     }
 
-    Type mapType = new TypeToken<Map<String, String>>() {}.getType();
+    Type mapType = new TypeToken<Map<String, String>>() {
+    }.getType();
     return new Gson().fromJson(secretKeyJson, mapType);
   }
 
   public String getSecretKey(String keyName) {
+    log.info(" secret for key {}:", keyName);
     try {
       GetSecretValueRequest secretValueRequest = GetSecretValueRequest.builder()
           .secretId(keyName)
