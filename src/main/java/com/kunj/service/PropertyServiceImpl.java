@@ -1,6 +1,7 @@
 package com.kunj.service;
 
 import com.kunj.dto.request.PropertyRequestDTO;
+import com.kunj.dto.response.PropertyCategoryResponse;
 import com.kunj.dto.response.PropertyResponseDTO;
 import com.kunj.entity.OwnerProperty;
 import com.kunj.entity.PropertyCategory;
@@ -9,6 +10,8 @@ import com.kunj.repository.PropertyRepository;
 import com.kunj.util.components.UserProfileRequestScop;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.PageRequest;
@@ -75,6 +78,19 @@ public class PropertyServiceImpl implements PropertyService {
     Pageable firstPageWithFiveElements = PageRequest.of(0, 5);
     List<OwnerProperty> ownerPropertyList =  propertyRepository.getNearest50Properties(firstPageWithFiveElements);
     return convertOwnerPropertyModelToResponseDTO(ownerPropertyList);
+  }
+
+  @Override
+  public Set<PropertyCategoryResponse> getAlLPropertyCategory() {
+    List<PropertyCategory> categoryResponses =  propertyCategoryRepository.findAll();
+    return  categoryResponses.stream().map(propertyCategory -> {
+
+      PropertyCategoryResponse propertyCategoryResponse = new PropertyCategoryResponse();
+      propertyCategoryResponse.setCategoryName(propertyCategory.getPropertyType());
+      propertyCategoryResponse.setCategoryId(propertyCategory.getId()+"");
+      return propertyCategoryResponse;
+    }).collect(Collectors.toSet());
+
   }
 
   private List<PropertyResponseDTO> convertOwnerPropertyModelToResponseDTO(

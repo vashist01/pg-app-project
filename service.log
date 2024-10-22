@@ -1,0 +1,40 @@
+2024-10-21 22:30:10.982 [main] INFO  c.kunj.service.JwtTokenAuthService - JwtTokenAuthService intialize service : PropertyConfig(verifyOtpTiemDuration=5, dnymoDbTableName=PG-LOCAL-AUTH, region=ap-south-1, accessKey=AKIAYUQGTBT66UATXNWY, jwtSecretKey=3cfa76ef14937c1c0ea519f8fc057a80fcd04a7420f8e8bcd0a7567c272e007b, secretKey=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, jwtExpiration=5, awsSecretManagerUtil=com.kunj.util.AwsSecretManagerUtil@71bebddf, activeProfile=null) 
+2024-10-21 22:30:14.238 [main] INFO  c.k.s.PropertyCategoryServiceImpl - defalut catelgory list is : [flat, room, pg] 
+2024-10-21 22:30:14.453 [main] INFO  c.k.s.PropertyCategoryServiceImpl - Existing property categories: [flat, room, pg]
+2024-10-21 22:30:14.454 [main] INFO  c.k.s.PropertyCategoryServiceImpl - Property category 'flat' already exists, skipping.
+2024-10-21 22:30:14.465 [main] INFO  c.k.s.PropertyCategoryServiceImpl - Property category 'room' already exists, skipping.
+2024-10-21 22:30:14.466 [main] INFO  c.k.s.PropertyCategoryServiceImpl - Property category 'pg' already exists, skipping.
+2024-10-21 22:30:14.466 [main] INFO  c.k.s.PropertyCategoryServiceImpl - No new property categories to save.
+2024-10-21 22:30:14.470 [main] INFO  c.k.s.PropertyCategoryServiceImpl - Default subcategory list is : {flate=[1BHK, 2BHK, 3BHK], room=[1-RK, 2-RK, 3-RK], house=[], shop=[]}
+2024-10-21 22:30:14.531 [main] INFO  c.k.s.PropertyCategoryServiceImpl - Processing subcategories for property type: PropertyCategory(id=1, propertyType=flat, subCategorySet=[])
+2024-10-21 22:30:14.612 [main] INFO  c.k.s.PropertyCategoryServiceImpl - Existing subcategories: []
+2024-10-21 22:30:14.613 [main] WARN  c.k.s.PropertyCategoryServiceImpl - No subcategories to save as the subCategoryList is empty.
+2024-10-21 22:30:14.613 [main] INFO  c.k.s.PropertyCategoryServiceImpl - No new subcategories to save, all provided subcategories already exist.
+2024-10-21 22:30:14.613 [main] INFO  c.k.s.PropertyCategoryServiceImpl - Processing subcategories for property type: PropertyCategory(id=2, propertyType=room, subCategorySet=[])
+2024-10-21 22:30:14.712 [main] INFO  c.k.s.PropertyCategoryServiceImpl - Existing subcategories: [1-RK, 2-RK, 3-RK]
+2024-10-21 22:30:14.712 [main] INFO  c.k.s.PropertyCategoryServiceImpl - No new subcategories to save, all provided subcategories already exist.
+2024-10-21 22:30:14.712 [main] INFO  c.k.s.PropertyCategoryServiceImpl - Processing subcategories for property type: PropertyCategory(id=3, propertyType=pg, subCategorySet=[])
+2024-10-21 22:30:14.777 [main] INFO  c.k.s.PropertyCategoryServiceImpl - Existing subcategories: []
+2024-10-21 22:30:14.777 [main] WARN  c.k.s.PropertyCategoryServiceImpl - No subcategories to save as the subCategoryList is empty.
+2024-10-21 22:30:14.777 [main] INFO  c.k.s.PropertyCategoryServiceImpl - No new subcategories to save, all provided subcategories already exist.
+2024-10-21 22:33:08.025 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2024-10-21 22:33:12.739 [main] INFO  c.kunj.service.JwtTokenAuthService - JwtTokenAuthService intialize service : PropertyConfig(verifyOtpTiemDuration=5, dnymoDbTableName=PG-LOCAL-AUTH, region=ap-south-1, accessKey=AKIAYUQGTBT66UATXNWY, jwtSecretKey=3cfa76ef14937c1c0ea519f8fc057a80fcd04a7420f8e8bcd0a7567c272e007b, secretKey=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, jwtExpiration=5, awsSecretManagerUtil=com.kunj.util.AwsSecretManagerUtil@1d8f835c, activeProfile=null) 
+2024-10-21 22:33:14.620 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-10-21 22:33:16.212 [main] INFO  c.k.s.PropertyCategoryServiceImpl - defalut catelgory list is : [flat, room, pg] 
+2024-10-21 22:33:16.485 [main] INFO  c.k.s.PropertyCategoryServiceImpl - Existing property categories: [flat, room, pg]
+2024-10-21 22:33:16.485 [main] INFO  c.k.s.PropertyCategoryServiceImpl - Property category 'flat' already exists, skipping.
+2024-10-21 22:33:16.485 [main] INFO  c.k.s.PropertyCategoryServiceImpl - Property category 'room' already exists, skipping.
+2024-10-21 22:33:16.485 [main] INFO  c.k.s.PropertyCategoryServiceImpl - Property category 'pg' already exists, skipping.
+2024-10-21 22:33:16.485 [main] INFO  c.k.s.PropertyCategoryServiceImpl - No new property categories to save.
+2024-10-21 22:33:16.491 [main] INFO  c.k.s.PropertyCategoryServiceImpl - Default subcategory list is : {flate=[1BHK, 2BHK, 3BHK], room=[1-RK, 2-RK, 3-RK], house=[], shop=[]}
+2024-10-21 22:33:16.545 [main] INFO  c.k.s.PropertyCategoryServiceImpl - Processing subcategories for property type: PropertyCategory(id=1, propertyType=flat, subCategorySet=[])
+2024-10-21 22:33:16.637 [main] INFO  c.k.s.PropertyCategoryServiceImpl - Existing subcategories: []
+2024-10-21 22:33:16.637 [main] WARN  c.k.s.PropertyCategoryServiceImpl - No subcategories to save as the subCategoryList is empty.
+2024-10-21 22:33:16.637 [main] INFO  c.k.s.PropertyCategoryServiceImpl - No new subcategories to save, all provided subcategories already exist.
+2024-10-21 22:33:16.637 [main] INFO  c.k.s.PropertyCategoryServiceImpl - Processing subcategories for property type: PropertyCategory(id=2, propertyType=room, subCategorySet=[])
+2024-10-21 22:33:16.745 [main] INFO  c.k.s.PropertyCategoryServiceImpl - Existing subcategories: [1-RK, 2-RK, 3-RK]
+2024-10-21 22:33:16.746 [main] INFO  c.k.s.PropertyCategoryServiceImpl - No new subcategories to save, all provided subcategories already exist.
+2024-10-21 22:33:16.746 [main] INFO  c.k.s.PropertyCategoryServiceImpl - Processing subcategories for property type: PropertyCategory(id=3, propertyType=pg, subCategorySet=[])
+2024-10-21 22:33:16.818 [main] INFO  c.k.s.PropertyCategoryServiceImpl - Existing subcategories: []
+2024-10-21 22:33:16.819 [main] WARN  c.k.s.PropertyCategoryServiceImpl - No subcategories to save as the subCategoryList is empty.
+2024-10-21 22:33:16.819 [main] INFO  c.k.s.PropertyCategoryServiceImpl - No new subcategories to save, all provided subcategories already exist.

@@ -1,8 +1,10 @@
 package com.kunj.service;
 
 import com.kunj.dto.request.PropertyRequestDTO;
+import com.kunj.dto.response.PropertyCategoryResponse;
 import com.kunj.dto.response.PropertyResponseDTO;
 import java.util.List;
+import java.util.Set;
 
 /**
  * The interface Property service.
@@ -25,4 +27,6 @@ public interface PropertyService {
   List<PropertyResponseDTO> getPropertiesByOwner();
 
   List<PropertyResponseDTO> getAllNearestProperties();
+
+  Set<PropertyCategoryResponse> getAlLPropertyCategory();
 }
