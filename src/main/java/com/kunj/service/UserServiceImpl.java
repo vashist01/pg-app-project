@@ -123,7 +123,7 @@ public class UserServiceImpl implements UserService {
   
     Optional<User> userOptional = userRepository.findByMobileNumber(mobileNumber); 
     if (userOptional.isEmpty()) {
-        throw new InValidMobileNumberException("Invalid mobile number. Please check the number you entered or register if you don't have an account.","400")
+        throw new InValidMobileNumberException("Invalid mobile number. Please check the number you entered or register if you don't have an account.","400");
     } 
     String token = jwtTokenAuthService.genrateToken(mobileNumber, TOKEN_EXPIRE_DATE);
     log.info("User login method is being executed for mobile number: {}", userDto);
