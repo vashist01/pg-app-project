@@ -2,6 +2,7 @@ package com.kunj.exception;
 
 import com.kunj.exception.custome.BadCredentialsException;
 import com.kunj.exception.custome.BadRequestException;
+import com.kunj.exception.custome.InValidMobileNumberException;
 import com.kunj.exception.custome.InvalidException;
 import com.kunj.exception.custome.InvalidOtpException;
 import java.util.Date;
@@ -91,6 +92,15 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         ApiErrorMessageResponse.builder().errorMessage(invalidException.getErrorMessage())
             .errorCode(
                 invalidException.getErrorCode()).errorLogDateTime(new Date()).build(),
+        HttpStatus.BAD_REQUEST);
+  }
+  @ExceptionHandler(InValidMobileNumberException.class)
+  public ResponseEntity<ApiErrorMessageResponse> inValidMobileNumberException(
+      InValidMobileNumberException inValidMobileNumberException, WebRequest webRequest) {
+    return new ResponseEntity<>(
+        ApiErrorMessageResponse.builder().errorMessage(inValidMobileNumberException.getErrorMessage())
+            .errorCode(
+                inValidMobileNumberException.getErrorCode()).errorLogDateTime(new Date()).build(),
         HttpStatus.BAD_REQUEST);
   }
 }
