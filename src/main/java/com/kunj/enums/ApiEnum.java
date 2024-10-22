@@ -4,7 +4,7 @@ package com.kunj.enums;
 public enum ApiEnum {
 
   AVI_VERSION("/api/v1/"),;
-
+  public static final String GET_ALL_PROPERTY_CATEGORY ="/property-category";
   public static final String GET_PROPERTY = "/properties";
 
   public static final String API_VERSION = "/api/v_1";

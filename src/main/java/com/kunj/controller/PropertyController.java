@@ -1,10 +1,13 @@
 package com.kunj.controller;
 
 import com.kunj.dto.request.PropertyRequestDTO;
+import com.kunj.dto.response.PropertyCategoryResponse;
 import com.kunj.dto.response.PropertyResponseDTO;
 import com.kunj.enums.ApiEnum;
 import com.kunj.service.PropertyService;
 import java.util.List;
+import java.util.Set;
+import jdk.jfr.Category;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -58,5 +61,11 @@ public class PropertyController {
   public ResponseEntity<List<PropertyResponseDTO>> getPropertiesByOwner() {
     List<PropertyResponseDTO> propertyResponseDTO = propertyService.getPropertiesByOwner();
     return new ResponseEntity<>(propertyResponseDTO, HttpStatus.OK);
+  }
+
+  @GetMapping(ApiEnum.GET_ALL_PROPERTY_CATEGORY)
+  public ResponseEntity<Set<PropertyCategoryResponse>> getAllPropertyCategory(){
+    Set<PropertyCategoryResponse> propertyCategoryResponsesSet = propertyService.getAlLPropertyCategory();
+    return new ResponseEntity<>(propertyCategoryResponsesSet, HttpStatus.OK);
   }
 }

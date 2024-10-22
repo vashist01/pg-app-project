@@ -120,12 +120,13 @@ public class UserServiceImpl implements UserService {
     List<Map<String, AttributeValue>> readDynamoDbData = dynamoDbAuthService
         .readDataFromDynamoDbByMobileNumber(mobileNumberAndDynamoDbTable.getLeft(),
             mobileNumberAndDynamoDbTable.getRight());
-
+  
+    Optional<User> userOptional = userRepository.findByMobileNumber(mobileNumber); 
+    if (userOptional.isEmpty()) {
+        throw new InValidMobileNumberException("Invalid mobile number. Please check the number you entered or register if you don't have an account.","400")
+    } 
     String token = jwtTokenAuthService.genrateToken(mobileNumber, TOKEN_EXPIRE_DATE);
-    Optional<User> userOptional = userRepository.findByMobileNumber(mobileNumber);
-
-    if (userOptional.isPresent()) {
-      log.info("User login method is being executed for mobile number: {}", userDto);
+    log.info("User login method is being executed for mobile number: {}", userDto);
       User user = userRepository.findByMobileNumber(userDto.getMobileNumber()).orElseThrow(() -> new InValidMobileNumberException("Invalid User Mobile Number","100200"));
       UserAuthToken userAuthToken = CommonMethodUtil.createAuthToken(token, user,userAuthTokenRepository);
 
@@ -136,13 +137,6 @@ public class UserServiceImpl implements UserService {
           dynamoDbAuthTableName);
       dynamoDbAuthService.persistDataToDynamoDb(dynamoDbData, dynamoDbAuthTableName);
       return otpService.genrateOtp(user);
-    }
-    /**
-     * UPDATE USER TOKEN IF ALREADY EXIST
-     */
-    updateTokenIfExpired(dynamoDbAuthTableName, readDynamoDbData, mobileNumber, token,
-        userOptional);
-    return otpService.genrateOtp(userOptional.get());
   }
 
 

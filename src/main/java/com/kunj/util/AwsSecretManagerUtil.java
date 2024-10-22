@@ -30,8 +30,7 @@ public class AwsSecretManagerUtil {
       , @Value("${access.key}") String accessKey,
       @Value("${secret.key}") String secretKey) {
 
-    log.info(" secretKey for key {}:", secretKey);
-    log.info(" accessKey for key {}:", accessKey);
+
 
     secretsManagerClient = SecretsManagerClient.builder()
         .region(Region.of(region))
@@ -57,6 +56,7 @@ public class AwsSecretManagerUtil {
 
   public String getSecretKey(String keyName) {
     log.info(" secret for key {}:", keyName);
+
     try {
       GetSecretValueRequest secretValueRequest = GetSecretValueRequest.builder()
           .secretId(keyName)
