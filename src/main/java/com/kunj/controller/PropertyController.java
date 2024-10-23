@@ -1,6 +1,7 @@
 package com.kunj.controller;
 
 import com.kunj.dto.request.PropertyRequestDTO;
+import com.kunj.dto.request.SearchPropertyRequestDTO;
 import com.kunj.dto.response.PropertyCategoryResponse;
 import com.kunj.dto.response.PropertyResponseDTO;
 import com.kunj.enums.ApiEnum;
@@ -11,6 +12,7 @@ import jdk.jfr.Category;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -68,4 +70,17 @@ public class PropertyController {
     Set<PropertyCategoryResponse> propertyCategoryResponsesSet = propertyService.getAlLPropertyCategory();
     return new ResponseEntity<>(propertyCategoryResponsesSet, HttpStatus.OK);
   }
+
+  @PostMapping(ApiEnum.GET_PROPERTY_BY_LOCATION)
+  public ResponseEntity<Set<PropertyResponseDTO>> getAllPropertyByLocation(@RequestBody
+  SearchPropertyRequestDTO searchPropertyRequestDTO){
+    Set<PropertyResponseDTO> propertyCategoryResponsesSet = propertyService.getAllPropertyByLocation(searchPropertyRequestDTO);
+    return new ResponseEntity<>(propertyCategoryResponsesSet, HttpStatus.OK);
+  }
+  @GetMapping(ApiEnum.GET_PROPERTY_DETAIL_BY_ID)
+  public ResponseEntity<PropertyResponseDTO> getPropertyDetailsById(@PathVariable String propertyId){
+    PropertyResponseDTO  propertyCategoryResponsesSet = propertyService.getPropertyDetailsById(propertyId);
+    return new ResponseEntity<>(propertyCategoryResponsesSet, HttpStatus.OK);
+  }
+
 }
