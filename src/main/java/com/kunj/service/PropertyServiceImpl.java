@@ -1,6 +1,7 @@
 package com.kunj.service;
 
 import com.kunj.dto.request.PropertyRequestDTO;
+import com.kunj.dto.request.SearchPropertyRequestDTO;
 import com.kunj.dto.response.PropertyCategoryResponse;
 import com.kunj.dto.response.PropertyResponseDTO;
 import com.kunj.entity.OwnerProperty;
@@ -8,11 +9,13 @@ import com.kunj.entity.PropertyCategory;
 import com.kunj.repository.PropertyCategoryRepository;
 import com.kunj.repository.PropertyRepository;
 import com.kunj.util.components.UserProfileRequestScop;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.PropertyNotFoundException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -93,6 +96,30 @@ public class PropertyServiceImpl implements PropertyService {
 
   }
 
+  @Override
+  public Set<PropertyResponseDTO> getAllPropertyByLocation(SearchPropertyRequestDTO searchPropertyRequestDTO) {
+    Pageable pageable = PageRequest.of(searchPropertyRequestDTO.getPage(), searchPropertyRequestDTO.getSize());
+
+    // Fetch the paginated list of properties from the repository
+    List<OwnerProperty> ownerPropertyList = propertyRepository.findAll(pageable).getContent();
+
+    // Convert the list of OwnerProperty to PropertyResponseDTO
+    List<PropertyResponseDTO> propertyResponseDTOS = convertOwnerPropertyModelToResponseDTO(ownerPropertyList);
+
+    // Return as a Set to avoid duplicates
+    return new HashSet<>(propertyResponseDTOS);
+  }
+
+  @Override
+  public PropertyResponseDTO getPropertyDetailsById(String propertyId) {
+    return propertyRepository.findById(Long.valueOf(propertyId)).map(property -> {
+      PropertyResponseDTO propertyResponseDTO = new PropertyResponseDTO();
+      BeanUtils.copyProperties(property,propertyResponseDTO);
+      return propertyResponseDTO;
+    }).orElseThrow(() -> new PropertyNotFoundException("Property Not found by  propertyId:"));
+
+  }
+
   private List<PropertyResponseDTO> convertOwnerPropertyModelToResponseDTO(
       List<OwnerProperty> ownerPropertyList) {
 
@@ -107,4 +134,6 @@ public class PropertyServiceImpl implements PropertyService {
       return propertyResponseDTO;
     }).toList();
   }
+
+
 }
