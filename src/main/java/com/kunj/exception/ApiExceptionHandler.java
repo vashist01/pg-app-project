@@ -1,11 +1,13 @@
 package com.kunj.exception;
 
+import com.kunj.dto.response.ResponseBO;
+import com.kunj.dto.response.ResponseErrorBO;
 import com.kunj.exception.custome.BadCredentialsException;
 import com.kunj.exception.custome.BadRequestException;
 import com.kunj.exception.custome.InValidMobileNumberException;
 import com.kunj.exception.custome.InvalidException;
 import com.kunj.exception.custome.InvalidOtpException;
-import java.util.Date;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -24,6 +26,12 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
+  protected final GenericController genericController;
+
+  public ApiExceptionHandler(GenericController genericController) {
+    this.genericController = genericController;
+  }
+
   /**
    * Bad credentials exception response entity.
    *
@@ -37,7 +45,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     return new ResponseEntity<>(
         ApiErrorMessageResponse.builder().errorMessage(badCredentialsException.getErrorMessage())
             .errorCode(
-                badCredentialsException.getErrorCode()).errorLogDateTime(new Date()).build(),
+                badCredentialsException.getErrorCode()).build(),
         HttpStatus.BAD_REQUEST);
   }
 
@@ -54,7 +62,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     return new ResponseEntity<>(
         ApiErrorMessageResponse.builder().errorMessage(invalidOtpException.getErrorMessage())
             .errorCode(
-                invalidOtpException.getErrorCode()).errorLogDateTime(new Date()).build(),
+                invalidOtpException.getErrorCode()).build(),
         HttpStatus.BAD_REQUEST);
   }
 
@@ -66,41 +74,45 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
    * @return the response entity
    */
   @ExceptionHandler(BadRequestException.class)
-  public ResponseEntity<ApiErrorMessageResponse> badRequestException(
-      InvalidOtpException invalidOtpException, WebRequest webRequest) {
-    return new ResponseEntity<>(
+  public ResponseEntity<ResponseErrorBO<Object>> badRequestException(
+      InvalidOtpException invalidOtpException, HttpServletRequest webRequest) {
+    return genericController.sendFailure(null,
         ApiErrorMessageResponse.builder().errorMessage(invalidOtpException.getErrorMessage())
             .errorCode(
-                invalidOtpException.getErrorCode()).errorLogDateTime(new Date()).build(),
-        HttpStatus.BAD_REQUEST);
+                invalidOtpException.getErrorCode()).build(),
+        HttpStatus.BAD_REQUEST.value(), webRequest);
   }
 
   @ExceptionHandler(IllegalArgumentException.class)
-  public ResponseEntity<ApiErrorMessageResponse> illegalArgumentException(
-      InvalidOtpException invalidOtpException, WebRequest webRequest) {
-    return new ResponseEntity<>(
+  public ResponseEntity<ResponseErrorBO<Object>> illegalArgumentException(
+      InvalidOtpException invalidOtpException, HttpServletRequest webRequest) {
+    return genericController.sendFailure(null,
         ApiErrorMessageResponse.builder().errorMessage(invalidOtpException.getErrorMessage())
             .errorCode(
-                invalidOtpException.getErrorCode()).errorLogDateTime(new Date()).build(),
-        HttpStatus.BAD_REQUEST);
+                invalidOtpException.getErrorCode()).build(),
+        HttpStatus.BAD_REQUEST.value(), webRequest);
   }
 
   @ExceptionHandler(InvalidException.class)
-  public ResponseEntity<ApiErrorMessageResponse> invalidException(
-      InvalidException invalidException, WebRequest webRequest) {
-    return new ResponseEntity<>(
+  public ResponseEntity<ResponseErrorBO<Object>> invalidException(
+      InvalidException invalidException, HttpServletRequest webRequest) {
+    return genericController.sendFailure(null,
         ApiErrorMessageResponse.builder().errorMessage(invalidException.getErrorMessage())
             .errorCode(
-                invalidException.getErrorCode()).errorLogDateTime(new Date()).build(),
-        HttpStatus.BAD_REQUEST);
+                invalidException.getErrorCode()).build(),
+        HttpStatus.BAD_REQUEST.value(), webRequest);
   }
+
   @ExceptionHandler(InValidMobileNumberException.class)
-  public ResponseEntity<ApiErrorMessageResponse> inValidMobileNumberException(
-      InValidMobileNumberException inValidMobileNumberException, WebRequest webRequest) {
-    return new ResponseEntity<>(
+  public ResponseEntity<ResponseErrorBO<Object>> handleMethodArgumentTypeMismatchException(
+      InValidMobileNumberException inValidMobileNumberException,
+      HttpServletRequest request) {
+
+    return genericController.sendFailure(null,
         ApiErrorMessageResponse.builder().errorMessage(inValidMobileNumberException.getErrorMessage())
             .errorCode(
-                inValidMobileNumberException.getErrorCode()).errorLogDateTime(new Date()).build(),
-        HttpStatus.BAD_REQUEST);
+                inValidMobileNumberException.getErrorCode()).build(),
+        HttpStatus.BAD_REQUEST.value(), request);
   }
 }
+

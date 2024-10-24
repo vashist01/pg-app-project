@@ -1,13 +1,14 @@
 package com.kunj.controller;
 
+import com.kunj.ResponseMessageConstant;
 import com.kunj.dto.request.UserProfileRequestDTO;
 import com.kunj.dto.response.ProfileImageResponse;
-import com.kunj.dto.response.PropertyResponseDTO;
+import com.kunj.dto.response.ResponseBO;
 import com.kunj.enums.ApiEnum;
 import com.kunj.enums.ConstantEnums;
+import com.kunj.exception.GenericController;
 import com.kunj.service.UserProfileService;
-import java.util.List;
-import java.util.Objects;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping(ApiEnum.API_VERSION)
-public class UserProfileController {
+public class UserProfileController extends GenericController {
+
   private final UserProfileService userProfileService;
 
   public UserProfileController(UserProfileService userProfileService) {
@@ -29,20 +31,28 @@ public class UserProfileController {
 
 
   @PostMapping(ApiEnum.CREATE_PROFILE)
-  public ResponseEntity<Object> createUserProfile(@RequestBody UserProfileRequestDTO userProfileRequestDTO){
+  public ResponseEntity<ResponseBO<Object>> createUserProfile(
+      @RequestBody UserProfileRequestDTO userProfileRequestDTO,
+      HttpServletRequest httpServletRequest) {
     userProfileService.createUserProfile(userProfileRequestDTO);
-    return new ResponseEntity<>(ConstantEnums.SUCCESSFULLY_REGISTER.getValue(), HttpStatus.OK);
+    return sendResponse("",
+        ResponseMessageConstant.SUCCESS, httpServletRequest);
   }
 
   @PutMapping(ApiEnum.UPDATE_PROFILE)
-  public ResponseEntity<Object> updateUserProfile(@RequestBody UserProfileRequestDTO userProfileRequestDTO){
-      userProfileService.updateUserProfile(userProfileRequestDTO);
+  public ResponseEntity<Object> updateUserProfile(
+      @RequestBody UserProfileRequestDTO userProfileRequestDTO) {
+    userProfileService.updateUserProfile(userProfileRequestDTO);
     return new ResponseEntity<>(ConstantEnums.SUCCESSFULLY_REGISTER.getValue(), HttpStatus.OK);
   }
 
   @PostMapping(ApiEnum.UPLOAD_PROFILE_IMAGE)
-  public ResponseEntity<ProfileImageResponse> uploadProfileImage(@RequestParam("profile_image") MultipartFile multipartFile){
-   ProfileImageResponse profileImageResponse =  userProfileService.uploadProfileImage(multipartFile);
-    return new ResponseEntity<>(profileImageResponse, HttpStatus.OK);
+  public ResponseEntity<ResponseBO<ProfileImageResponse>> uploadProfileImage(
+      @RequestParam("profile_image") MultipartFile multipartFile,
+      HttpServletRequest httpServletRequest) {
+    ProfileImageResponse profileImageResponse = userProfileService.uploadProfileImage(
+        multipartFile);
+    return sendResponse(profileImageResponse, ResponseMessageConstant.SUCCESS, httpServletRequest);
+
   }
 }

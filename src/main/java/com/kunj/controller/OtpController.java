@@ -43,5 +43,6 @@ public class OtpController {
   @PostMapping(ApiEnum.VERIFY_OTP)
   public ResponseEntity<UserResponse> verifyOtp(@RequestBody @Valid VerifyOtpDto verifyOtpDto) {
     return new ResponseEntity<>(otpService.verifyOtp(verifyOtpDto), HttpStatus.OK);
+
   }
 }
