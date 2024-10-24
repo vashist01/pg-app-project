@@ -1,23 +1,20 @@
-package com.kunj.exception;
+package com.kunj.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * The type Api error message response.
- */
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ApiErrorMessageResponse {
+@Builder
+public class ErrorBo {
 
   @JsonProperty("error_message")
   private String errorMessage;
   @JsonProperty("error_code")
   private String errorCode;
+
 }

@@ -1,15 +1,17 @@
 package com.kunj.controller;
 
+import com.kunj.ResponseMessageConstant;
 import com.kunj.dto.request.PropertyRequestDTO;
 import com.kunj.dto.request.SearchPropertyRequestDTO;
 import com.kunj.dto.response.PropertyCategoryResponse;
 import com.kunj.dto.response.PropertyResponseDTO;
+import com.kunj.dto.response.ResponseBO;
 import com.kunj.enums.ApiEnum;
+import com.kunj.exception.GenericController;
 import com.kunj.service.PropertyService;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Set;
-import jdk.jfr.Category;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping(ApiEnum.API_VERSION)
-public class PropertyController {
+public class PropertyController extends GenericController {
 
   private final PropertyService propertyService;
 
@@ -47,11 +49,11 @@ public class PropertyController {
    * @return the response entity
    */
   @PostMapping(ApiEnum.API_ADD_PROPERTY)
-  public ResponseEntity<List<PropertyResponseDTO>> addProperty(
-      @RequestBody PropertyRequestDTO propertyRequestDTO) {
+  public ResponseEntity<ResponseBO<List<PropertyResponseDTO>>> addProperty(
+      @RequestBody PropertyRequestDTO propertyRequestDTO, HttpServletRequest httpServletRequest) {
     List<PropertyResponseDTO> propertyResponseDTO = propertyService.addProperty(
         propertyRequestDTO);
-    return new ResponseEntity<>(propertyResponseDTO, HttpStatus.OK);
+    return sendResponse(propertyResponseDTO, ResponseMessageConstant.SUCCESS, httpServletRequest);
   }
 
   /**
@@ -60,27 +62,36 @@ public class PropertyController {
    * @return the response entity
    */
   @GetMapping(ApiEnum.GET_PROPERTY)
-  public ResponseEntity<List<PropertyResponseDTO>> getPropertiesByOwner() {
+  public ResponseEntity<ResponseBO<List<PropertyResponseDTO>>> getPropertiesByOwner(
+      HttpServletRequest httpServletRequest) {
     List<PropertyResponseDTO> propertyResponseDTO = propertyService.getPropertiesByOwner();
-    return new ResponseEntity<>(propertyResponseDTO, HttpStatus.OK);
+    return sendResponse(propertyResponseDTO, ResponseMessageConstant.SUCCESS, httpServletRequest);
   }
 
   @GetMapping(ApiEnum.GET_ALL_PROPERTY_CATEGORY)
-  public ResponseEntity<Set<PropertyCategoryResponse>> getAllPropertyCategory(){
+  public ResponseEntity<ResponseBO<Set<PropertyCategoryResponse>>> getAllPropertyCategory(
+      HttpServletRequest httpServletRequest) {
     Set<PropertyCategoryResponse> propertyCategoryResponsesSet = propertyService.getAlLPropertyCategory();
-    return new ResponseEntity<>(propertyCategoryResponsesSet, HttpStatus.OK);
+    return sendResponse(propertyCategoryResponsesSet, ResponseMessageConstant.SUCCESS,
+        httpServletRequest);
   }
 
   @PostMapping(ApiEnum.GET_PROPERTY_BY_LOCATION)
-  public ResponseEntity<Set<PropertyResponseDTO>> getAllPropertyByLocation(@RequestBody
-  SearchPropertyRequestDTO searchPropertyRequestDTO){
-    Set<PropertyResponseDTO> propertyCategoryResponsesSet = propertyService.getAllPropertyByLocation(searchPropertyRequestDTO);
-    return new ResponseEntity<>(propertyCategoryResponsesSet, HttpStatus.OK);
+  public ResponseEntity<ResponseBO<Set<PropertyResponseDTO>>> getAllPropertyByLocation(@RequestBody
+  SearchPropertyRequestDTO searchPropertyRequestDTO, HttpServletRequest httpServletRequest) {
+    Set<PropertyResponseDTO> propertyCategoryResponsesSet = propertyService.getAllPropertyByLocation(
+        searchPropertyRequestDTO);
+    return sendResponse(propertyCategoryResponsesSet, ResponseMessageConstant.SUCCESS,
+        httpServletRequest);
   }
+
   @GetMapping(ApiEnum.GET_PROPERTY_DETAIL_BY_ID)
-  public ResponseEntity<PropertyResponseDTO> getPropertyDetailsById(@PathVariable String propertyId){
-    PropertyResponseDTO  propertyCategoryResponsesSet = propertyService.getPropertyDetailsById(propertyId);
-    return new ResponseEntity<>(propertyCategoryResponsesSet, HttpStatus.OK);
+  public ResponseEntity<ResponseBO<PropertyResponseDTO>> getPropertyDetailsById(
+      @PathVariable String propertyId, HttpServletRequest httpServletRequest) {
+    PropertyResponseDTO propertyCategoryResponsesSet = propertyService.getPropertyDetailsById(
+        propertyId);
+    return sendResponse(propertyCategoryResponsesSet, ResponseMessageConstant.SUCCESS,
+        httpServletRequest);
   }
 
 }
