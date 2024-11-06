@@ -24,4 +24,6 @@ public class ProfileImage {
   private String profileImageS3Url;
   @Column(name = "user_id")
   private long userId;
+  @Column(name = "file_name")
+  private String fileName;
 }

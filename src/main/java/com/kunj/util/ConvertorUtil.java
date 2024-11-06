@@ -7,19 +7,15 @@ import com.kunj.enums.DateTimeFormatEnum;
 import com.kunj.enums.ValidationEnum;
 import com.kunj.enums.ValidationMessageEnum;
 import com.kunj.exception.custome.InValidMobileNumberException;
-import java.io.File;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Base64;
 import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * The type Convertor util.
@@ -95,9 +91,4 @@ public class ConvertorUtil {
   return  userProfile;
   }
 
-  public String convertFileToBase64String(MultipartFile multipartFile) throws IOException {
-    byte[] fileBytes = multipartFile.getBytes();
-    String base64ImageFile = Base64.getEncoder().encodeToString(fileBytes);
-    return  base64ImageFile;
-  }
 }

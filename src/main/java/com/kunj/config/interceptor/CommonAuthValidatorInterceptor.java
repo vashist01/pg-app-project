@@ -1,6 +1,7 @@
 package com.kunj.config.interceptor;
 
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.kunj.ResponseMessageConstant;
 import com.kunj.config.PropertyConfig;
 import com.kunj.dto.mapper.UserData;
 import com.kunj.enums.ConstantEnums;
@@ -74,14 +75,14 @@ public class CommonAuthValidatorInterceptor implements HandlerInterceptor {
     }
 
     log.warn("Authorization header is missing or invalid");
-    throw new InvalidAuthHeaderException("Bad Credentials.", "8001003");
+    throw new InvalidAuthHeaderException(ResponseMessageConstant.BAD_CREDENTIALS, ResponseMessageConstant.ERROR_CODE);
   }
 
   private void validateAuthHeader(String authHeader) throws InvalidAuthHeaderException {
     if (!StringUtils.hasLength(authHeader) || !authHeader.startsWith(
         ConstantEnums.BEARER.getValue())) {
       log.warn("Authorization header is missing or empty");
-      throw new InvalidAuthHeaderException("Bad Credentials.", "8001003");
+      throw new InvalidAuthHeaderException(ResponseMessageConstant.BAD_CREDENTIALS, ResponseMessageConstant.ERROR_CODE);
     }
   }
 
@@ -95,7 +96,7 @@ public class CommonAuthValidatorInterceptor implements HandlerInterceptor {
     log.info("token successfully processed .......... ");
     if (mobileNumber == null) {
       log.error("Invalid authentication header provided");
-      throw new InvalidAuthHeaderException("Invalid authentication header provided.", "8001003");
+      throw new InvalidAuthHeaderException("Invalid authentication header provided.", ResponseMessageConstant.ERROR_CODE);
     }
 
     List<Map<String, AttributeValue>> readDynamoDbData = dynmoDbAuthService.readDataFromDynamoDbByMobileNumber(
@@ -104,7 +105,7 @@ public class CommonAuthValidatorInterceptor implements HandlerInterceptor {
 
     if (CollectionUtils.isEmpty(readDynamoDbData)) {
       log.error("DynamoDB data is empty for mobile number: {}", mobileNumber);
-      throw new InvalidAuthHeaderException("Invalid authentication header provided.", "8001003");
+      throw new InvalidAuthHeaderException("Invalid authentication header provided.", ResponseMessageConstant.ERROR_CODE);
     }
     UserData user = readUserDataFromDynamoDb(readDynamoDbData);
     BeanUtils.copyProperties(user, userProfile);
@@ -113,7 +114,7 @@ public class CommonAuthValidatorInterceptor implements HandlerInterceptor {
     if (!mobileNumber.equalsIgnoreCase(dynamoDbMobileNumber)) {
       log.error("Mobile number mismatch: expected {}, found {}", dynamoDbMobileNumber,
           mobileNumber);
-      throw new InvalidAuthHeaderException("Bad Credentials.", "8001003");
+      throw new InvalidAuthHeaderException("Bad Credentials.", ResponseMessageConstant.ERROR_CODE);
     }
 
     boolean isTokenValid = tokenValidatorComponent.validateTokenExpireWithDymaodb(readDynamoDbData);

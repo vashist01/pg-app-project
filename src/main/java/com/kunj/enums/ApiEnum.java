@@ -25,6 +25,7 @@ public enum ApiEnum {
   public static final String UPDATE_PROFILE = "/update-profile";
   public static final String LOGIN = "/login";
   public static final String UPLOAD_PROFILE_IMAGE = "/upload-profile-image";
+  public static final String PROFILE_IMAGE = "/profile-image";
   public static final String GET_PROPERTY_DETAIL_BY_ID = "/property-details/{propertyId}";
   public static final String GET_PROPERTY_BY_LOCATION = "/property-by-location";
 
