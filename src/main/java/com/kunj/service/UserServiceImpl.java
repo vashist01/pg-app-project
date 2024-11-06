@@ -54,17 +54,7 @@ public class UserServiceImpl implements UserService {
 
   }
 
-  /**
-   * Handles the login process for a user based on the provided {@code UserDto}.
-   * <p>
-   * This method converts the CUID number in the {@code UserDto} to a mobile number, checks if a
-   * user with this mobile number exists in the repository, and either creates a new user or
-   * retrieves the existing user. It then generates a 6-digit OTP for the user and returns a
-   * {@code UserResponse} containing the generated OTP.
-   *
-   * @param userDto the {@code UserDto} containing the user's login information
-   * @return a {@code UserResponse} object containing the generated OTP
-   */
+
   @Override
   public UserResponse login(UserDto userDto) {
     log.info("User login method is being executed for mobile number: {}", userDto);
