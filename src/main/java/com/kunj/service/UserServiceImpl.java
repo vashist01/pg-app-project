@@ -56,7 +56,6 @@ public class UserServiceImpl implements UserService {
 
   /**
    * Handles the login process for a user based on the provided {@code UserDto}.
-   *
    * <p>
    * This method converts the CUID number in the {@code UserDto} to a mobile number, checks if a
    * user with this mobile number exists in the repository, and either creates a new user or
