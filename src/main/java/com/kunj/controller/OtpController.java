@@ -1,11 +1,15 @@
 package com.kunj.controller;
 
+import com.kunj.ResponseMessageConstant;
 import com.kunj.dto.request.VerifyOtpDto;
+import com.kunj.dto.response.ResponseBO;
 import com.kunj.dto.response.UserResponse;
 import com.kunj.enums.ApiEnum;
+import com.kunj.exception.GenericController;
 import com.kunj.service.OtpService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping(ApiEnum.API_VERSION)
-public class OtpController {
+public class OtpController extends GenericController {
 
   private final OtpService otpService;
 
@@ -41,8 +45,10 @@ public class OtpController {
   @Operation(summary = "verify User with Otp", description = "verify-otp")
   @SecurityRequirement(name = "Bearer Authentication")
   @PostMapping(ApiEnum.VERIFY_OTP)
-  public ResponseEntity<UserResponse> verifyOtp(@RequestBody @Valid VerifyOtpDto verifyOtpDto) {
-    return new ResponseEntity<>(otpService.verifyOtp(verifyOtpDto), HttpStatus.OK);
+  public ResponseEntity<ResponseBO<UserResponse>> verifyOtp(@RequestBody @Valid VerifyOtpDto verifyOtpDto,
+      HttpServletRequest httpServletRequest) {
+    UserResponse userResponse = otpService.verifyOtp(verifyOtpDto);
+    return sendResponse(userResponse, ResponseMessageConstant.SUCCESS,httpServletRequest);
 
   }
 }

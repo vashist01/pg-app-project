@@ -57,13 +57,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
    * @return the response entity
    */
   @ExceptionHandler(InvalidOtpException.class)
-  public ResponseEntity<ApiErrorMessageResponse> invalidOtpException(
-      InvalidOtpException invalidOtpException, WebRequest webRequest) {
-    return new ResponseEntity<>(
+  public ResponseEntity<ResponseErrorBO<Object>> invalidOtpException(
+      InvalidOtpException invalidOtpException, HttpServletRequest webRequest) {
+    return genericController.sendFailure(null,
         ApiErrorMessageResponse.builder().errorMessage(invalidOtpException.getErrorMessage())
             .errorCode(
                 invalidOtpException.getErrorCode()).build(),
-        HttpStatus.BAD_REQUEST);
+        HttpStatus.BAD_REQUEST.value(), webRequest);
   }
 
   /**

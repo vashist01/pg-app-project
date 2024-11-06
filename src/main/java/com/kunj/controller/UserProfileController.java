@@ -11,6 +11,7 @@ import com.kunj.service.UserProfileService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,7 +36,7 @@ public class UserProfileController extends GenericController {
       @RequestBody UserProfileRequestDTO userProfileRequestDTO,
       HttpServletRequest httpServletRequest) {
     userProfileService.createUserProfile(userProfileRequestDTO);
-    return sendResponse("",
+    return sendResponse(ConstantEnums.SUCCESSFULLY_REGISTER,
         ResponseMessageConstant.SUCCESS, httpServletRequest);
   }
 
@@ -54,5 +55,11 @@ public class UserProfileController extends GenericController {
         multipartFile);
     return sendResponse(profileImageResponse, ResponseMessageConstant.SUCCESS, httpServletRequest);
 
+  }
+  @GetMapping(ApiEnum.PROFILE_IMAGE)
+  public ResponseEntity<ResponseBO<ProfileImageResponse>> getProfileImage(
+      HttpServletRequest httpServletRequest) {
+    ProfileImageResponse profileImageResponse = userProfileService.getProfileImage();
+    return sendResponse(profileImageResponse, ResponseMessageConstant.SUCCESS, httpServletRequest);
   }
 }

@@ -20,12 +20,6 @@ public interface OtpRepository extends JpaRepository<Otp, Long> {
    */
   Optional<Otp> findByOtpAndMobileNumber(String otp, String mobileNumber);
 
-  /**
-   * Find by otp and user id optional.
-   *
-   * @param otp    the otp
-   * @param userId the user id
-   * @return the optional
-   */
-  Optional<Otp> findByOtpAndUserId(String otp, long userId);
+
+
 }

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
  * The interface User repository.
  */
 @Repository
-public interface UserRepository extends JpaRepository<User, String> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
   /**
    * Find by mobile number optional.

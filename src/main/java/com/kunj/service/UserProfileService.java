@@ -13,4 +13,6 @@ public interface UserProfileService {
    void  updateUserProfile(UserProfileRequestDTO userProfileRequestDTO);
 
    ProfileImageResponse  uploadProfileImage(MultipartFile multipartFile);
+
+   ProfileImageResponse getProfileImage();
 }

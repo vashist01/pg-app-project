@@ -1,5 +1,6 @@
 package com.kunj.service;
 
+import com.kunj.config.PropertyConfig;
 import com.kunj.dto.request.UserProfileRequestDTO;
 import com.kunj.dto.response.ProfileImageResponse;
 import com.kunj.dto.response.PropertyResponseDTO;
@@ -8,6 +9,7 @@ import com.kunj.entity.User;
 import com.kunj.entity.UserProfile;
 import com.kunj.enums.RoleEnum;
 import com.kunj.exception.custome.BadCredentialsException;
+import com.kunj.exception.custome.InvalidException;
 import com.kunj.repository.ProfileImageRepository;
 import com.kunj.repository.UserProfileRepository;
 import com.kunj.repository.UserRepository;
@@ -29,13 +31,16 @@ public class UserProfileServiceImpl implements UserProfileService {
   private final ConvertorUtil convertorUtil;
   private final UserProfileRequestScop userProfileRequestScop;
   private final UserRepository userRepository;
-  private final  PropertyService propertyService;
-  private  final ProfileImageRepository profileImageRepository;
-  private  final  AwsMethodUtils awsMethodUtils;
+  private final PropertyService propertyService;
+  private final ProfileImageRepository profileImageRepository;
+  private final AwsMethodUtils awsMethodUtils;
+  private final PropertyConfig propertyConfig;
+
   public UserProfileServiceImpl(UserProfileRepository userProfileRepository,
       ConvertorUtil convertorUtil, UserProfileRequestScop userProfileRequestScop,
-       UserRepository userRepository, PropertyService propertyService,
-      ProfileImageRepository profileImageRepository, AwsMethodUtils awsMethodUtils) {
+      UserRepository userRepository, PropertyService propertyService,
+      ProfileImageRepository profileImageRepository, AwsMethodUtils awsMethodUtils,
+      PropertyConfig propertyConfig) {
     this.userProfileRepository = userProfileRepository;
     this.convertorUtil = convertorUtil;
     this.userProfileRequestScop = userProfileRequestScop;
@@ -44,11 +49,13 @@ public class UserProfileServiceImpl implements UserProfileService {
     this.propertyService = propertyService;
     this.profileImageRepository = profileImageRepository;
     this.awsMethodUtils = awsMethodUtils;
+    this.propertyConfig = propertyConfig;
   }
 
   @Override
   public void createUserProfile(UserProfileRequestDTO userProfileRequestDTO) {
-    log.info("Creating user profile for mobile number: {}", userProfileRequestDTO.getMobileNumber());
+    log.info("Creating user profile for mobile number: {}",
+        userProfileRequestDTO.getMobileNumber());
     User user = registerUser(userProfileRequestDTO);
 
     log.info("User registered successfully with ID: {}", user.getId());
@@ -94,14 +101,62 @@ public class UserProfileServiceImpl implements UserProfileService {
   }
 
   @Override
-  public ProfileImageResponse   uploadProfileImage(MultipartFile multipartFile) {
-      String profileImageToS3Url =  awsMethodUtils.uploadProfileImageToS3(multipartFile,userProfileRequestScop.getId());
-      ProfileImage profileImage = ProfileImage.builder().profileImageS3Url(profileImageToS3Url).userId(
-          userProfileRequestScop.getId()).build();
-      profileImageRepository.save(profileImage);
+  public ProfileImageResponse uploadProfileImage(MultipartFile multipartFile) {
+    long userId = userProfileRequestScop.getId();
+    Optional<ProfileImage> optionalProfileImage = profileImageRepository.findByUserId(userId);
 
-    return awsMethodUtils.getProfileImageFromS3(profileImageToS3Url);
+    Pair<String,String> imageUrlAndFileName = awsMethodUtils.uploadProfileImageToS3(multipartFile, userId,optionalProfileImage);
+    saveUserProfileImage(imageUrlAndFileName,optionalProfileImage);
+
+    return awsMethodUtils.getProfileImageFromS3(getImageURl(imageUrlAndFileName.getLeft(),1));
+  }
+
+  @Override
+  public ProfileImageResponse getProfileImage() {
+    String profileImageUrl = null;
+    long userId = userProfileRequestScop.getId();
+    Optional<ProfileImage> optionalProfileImage = profileImageRepository.findByUserId(userId);
+
+    if (optionalProfileImage.isPresent()) {
+      ProfileImage profileImage = optionalProfileImage.get();
+
+      String s3ProfileImageUrl = profileImage.getProfileImageS3Url();
+      if (s3ProfileImageUrl != null && s3ProfileImageUrl.contains(propertyConfig.getS3ProfileImageLocation())) {
+
+        profileImageUrl = s3ProfileImageUrl.replace(propertyConfig.getS3ProfileImageLocation(), "");
+      } else {
+        profileImageUrl = s3ProfileImageUrl;
+      }
     }
+    if (profileImageUrl != null && !profileImageUrl.isEmpty()) {
+      return awsMethodUtils.getProfileImageFromS3(profileImageUrl);
+    }
+    throw new InvalidException("User Not found ","10008");
+  }
+
+
+  private void saveUserProfileImage(Pair<String, String> imageUrlAndFileName,
+      Optional<ProfileImage> optionalProfileImage) {
+    ProfileImage profileImage = optionalProfileImage.orElseGet(() ->
+        ProfileImage.builder()
+            .profileImageS3Url(getImageURl(imageUrlAndFileName.getLeft(),0))
+            .userId(userProfileRequestScop.getId())
+            .fileName(imageUrlAndFileName.getRight())
+            .build()
+    );
+
+    profileImageRepository.save(profileImage);
+  }
+
+  private String getImageURl(String imageUrls, int indexValue) {
+
+    int indexOf = imageUrls.indexOf('[');
+    if(indexValue == 1) {
+      String s3ImageUrl = (indexOf != -1) ? imageUrls.substring(indexOf + indexValue) : imageUrls;
+      return s3ImageUrl.replace("]","");
+    }
+    return (indexOf != -1) ? imageUrls.substring(indexValue,indexOf):imageUrls ;
+  }
 
   private List<PropertyResponseDTO> getPropertyListBasedOnRole() {
     Pair<Long, String> userProfilePairs = getUserIdAndRole();
