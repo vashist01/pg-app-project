@@ -2,6 +2,7 @@ package com.kunj.util;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.kunj.ResponseMessageConstant;
 import com.kunj.enums.AwsCredentialsStringConstant;
 import com.kunj.exception.custome.InvalidAuthHeaderException;
 import com.kunj.exception.custome.InvalidException;
@@ -82,7 +83,8 @@ public class AwsSecretManagerUtil {
         return propertyMap.get(asmKey);
       } else {
         log.error("Error while updating property key: {} and map: {}", asmKey, propertyMap);
-        throw new InvalidAuthHeaderException("Invalid secret manager key: " + asmKey, "102335");
+        throw new InvalidAuthHeaderException("Invalid secret manager key: " + asmKey,
+            ResponseMessageConstant.ERROR_CODE);
       }
 
     }
