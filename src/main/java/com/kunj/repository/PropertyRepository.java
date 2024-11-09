@@ -14,13 +14,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PropertyRepository extends JpaRepository<OwnerProperty, Long> {
 
-  /**
-   * Find by user id list.
-   *
-   * @param userId the user id
-   * @return the list
-   */
-  List<OwnerProperty> findByUserId(Long userId);
+
   @Query("FROM OwnerProperty p")
   List<OwnerProperty> getNearest50Properties(Pageable firstPageWithTwoElements);
+  List<OwnerProperty> findByUserId(Long id, Pageable pageable);
 }

@@ -45,8 +45,6 @@ public class UserServiceImpl implements UserService {
       OtpService otpService,
       OtpRepository otpRepository1) {
     this.userRepository = userRepository;
-
-
     this.convertorUtil = convertorUtil;
     this.propertyConfig = propertyConfig;
     this.otpService = otpService;

@@ -3,13 +3,17 @@ package com.kunj.controller;
 import com.kunj.ResponseMessageConstant;
 import com.kunj.dto.request.PropertyRequestDTO;
 import com.kunj.dto.request.SearchPropertyRequestDTO;
+import com.kunj.dto.response.ProfileImageResponse;
 import com.kunj.dto.response.PropertyCategoryResponse;
+import com.kunj.dto.response.PropertyImageResponse;
 import com.kunj.dto.response.PropertyResponseDTO;
 import com.kunj.dto.response.ResponseBO;
 import com.kunj.enums.ApiEnum;
 import com.kunj.exception.GenericController;
 import com.kunj.service.PropertyService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Set;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +22,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * by http server handle 200 request if system is 8 core then it will handling 8 core 8 thread is
@@ -29,6 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping(ApiEnum.API_VERSION)
+@Valid
 public class PropertyController extends GenericController {
 
   private final PropertyService propertyService;
@@ -88,10 +95,15 @@ public class PropertyController extends GenericController {
   @GetMapping(ApiEnum.GET_PROPERTY_DETAIL_BY_ID)
   public ResponseEntity<ResponseBO<PropertyResponseDTO>> getPropertyDetailsById(
       @PathVariable String propertyId, HttpServletRequest httpServletRequest) {
-    PropertyResponseDTO propertyCategoryResponsesSet = propertyService.getPropertyDetailsById(
-        propertyId);
+    PropertyResponseDTO propertyCategoryResponsesSet = propertyService.getPropertyDetailsById(propertyId);
     return sendResponse(propertyCategoryResponsesSet, ResponseMessageConstant.SUCCESS,
         httpServletRequest);
   }
 
+  @PostMapping(ApiEnum.UPLOAD_PROPERTY_IMAGE)
+  public ResponseEntity<ResponseBO<PropertyImageResponse>> uploadPropertyImage(
+      HttpServletRequest httpServletRequest,@Valid @NotNull @RequestParam("property_id") String propertyId,   @RequestParam("property_images") List<MultipartFile> multipartFileList) {
+    PropertyImageResponse profileImageResponse = propertyService.uploadPropertyImage(multipartFileList,propertyId);
+    return sendResponse(profileImageResponse, ResponseMessageConstant.SUCCESS, httpServletRequest);
+  }
 }

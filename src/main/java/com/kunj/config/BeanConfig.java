@@ -11,6 +11,8 @@ import com.amazonaws.services.secretsmanager.AWSSecretsManager;
 import com.amazonaws.services.secretsmanager.AWSSecretsManagerClientBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 
 /**
  * The type Bean config.
@@ -66,5 +68,10 @@ public class BeanConfig {
         .withCredentials(new AWSStaticCredentialsProvider(awsCredentials()))
         .withRegion(propertyConfig.getRegion())
         .build();
+  }
+
+  @Bean
+  public MultipartResolver multipartResolver() {
+    return new StandardServletMultipartResolver();
   }
 }

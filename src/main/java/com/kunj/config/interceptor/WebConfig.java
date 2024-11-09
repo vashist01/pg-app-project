@@ -26,7 +26,8 @@ public class WebConfig implements WebMvcConfigurer {
       "/swagger-ui.html",
       "/webjars/**",
       "/v3/api-docs/**",
-      "/swagger-ui/**"
+      "/swagger-ui/**",
+      "/actuator/**"
   };
   private final CommonAuthValidatorInterceptor commonAuthValidatorInterceptor;
 

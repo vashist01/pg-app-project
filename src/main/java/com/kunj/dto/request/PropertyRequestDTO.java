@@ -32,4 +32,5 @@ public class PropertyRequestDTO {
   private String security;
   @JsonProperty("category_id")
   private String categoryId;
+  private String sector;
 }
