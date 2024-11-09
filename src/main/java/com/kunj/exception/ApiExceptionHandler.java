@@ -4,6 +4,7 @@ import com.kunj.dto.response.ResponseBO;
 import com.kunj.dto.response.ResponseErrorBO;
 import com.kunj.exception.custome.BadCredentialsException;
 import com.kunj.exception.custome.BadRequestException;
+import com.kunj.exception.custome.FileUploadException;
 import com.kunj.exception.custome.InValidMobileNumberException;
 import com.kunj.exception.custome.InvalidException;
 import com.kunj.exception.custome.InvalidOtpException;
@@ -112,6 +113,18 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         ApiErrorMessageResponse.builder().errorMessage(inValidMobileNumberException.getErrorMessage())
             .errorCode(
                 inValidMobileNumberException.getErrorCode()).build(),
+        HttpStatus.BAD_REQUEST.value(), request);
+  }
+
+  @ExceptionHandler(FileUploadException.class)
+  public ResponseEntity<ResponseErrorBO<Object>> fileUploadException(
+      FileUploadException fileUploadException,
+      HttpServletRequest request) {
+
+    return genericController.sendFailure(null,
+        ApiErrorMessageResponse.builder().errorMessage(fileUploadException.getErrorMessage())
+            .errorCode(
+                fileUploadException.getErrorCode()).build(),
         HttpStatus.BAD_REQUEST.value(), request);
   }
 }

@@ -10,7 +10,6 @@ public enum ApiEnum {
   ;
   public static final String GET_ALL_PROPERTY_CATEGORY = "/property-category";
   public static final String GET_PROPERTY = "/properties";
-
   public static final String API_VERSION = "/api/v_1";
 
   public static final String USER_REGISTER = "/login";
@@ -28,7 +27,7 @@ public enum ApiEnum {
   public static final String PROFILE_IMAGE = "/profile-image";
   public static final String GET_PROPERTY_DETAIL_BY_ID = "/property-details/{propertyId}";
   public static final String GET_PROPERTY_BY_LOCATION = "/property-by-location";
-
+  public static final String UPLOAD_PROPERTY_IMAGE = "/upload-property-image";
 
   private final String apiName;
 

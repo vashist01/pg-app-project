@@ -56,6 +56,8 @@ public class UserProfileController extends GenericController {
     return sendResponse(profileImageResponse, ResponseMessageConstant.SUCCESS, httpServletRequest);
 
   }
+
+
   @GetMapping(ApiEnum.PROFILE_IMAGE)
   public ResponseEntity<ResponseBO<ProfileImageResponse>> getProfileImage(
       HttpServletRequest httpServletRequest) {

@@ -26,7 +26,8 @@ public class PropertyConfig {
   private final AwsSecretManagerUtil awsSecretManagerUtil;
   private String activeProfile;
   private final String s3ProfileImageLocation;
-
+  private final String profileImageBucketName;
+  private final String propertyImageBucketName;
 
   /**
    * Instantiates a new Property config.
@@ -48,15 +49,17 @@ public class PropertyConfig {
       @Value("${secret.key}") String secretKey,
       @Value("${security.jwt.expiration-time}") long jwtExpiration,
       @Value("${spring.profiles.active}") String activeProfile,
-      AwsSecretManagerUtil awsSecretManagerUtil,
-      @Value("${s3.profile.image.location}") String s3ProfileImageLocation) {
+      @Value("${s3.profile.image.location}") String s3ProfileImageLocation,
+      @Value("${profile.image.bucket.name}") String profileImageBucketName,
+      @Value("${property.image.bucket.name}") String propertyImageBucketName,
+      AwsSecretManagerUtil awsSecretManagerUtil) {
 
     this.verifyOtpTiemDuration = verifyOtpTimeDuration;
-
     this.awsSecretManagerUtil = awsSecretManagerUtil;
     this.s3ProfileImageLocation = s3ProfileImageLocation;
-    log.info(" secretKey for key {}:", secretKey);
-    log.info(" accessKey for key {}:", accessKey);
+    this.profileImageBucketName = profileImageBucketName;
+    this.propertyImageBucketName = propertyImageBucketName;
+
     Map<String, String> asmProperties = awsSecretManagerUtil.getSecretKeyByActiveEnvironment(
         activeProfile);
     this.dnymoDbTableName = DynamoDBTableName;
