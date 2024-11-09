@@ -63,12 +63,8 @@ public class BeanConfig {
   @Bean
   public AmazonS3 s3client() {
     return AmazonS3ClientBuilder.standard()
-        .withCredentials(new AWSStaticCredentialsProvider(awsCredentialss()))
+        .withCredentials(new AWSStaticCredentialsProvider(awsCredentials()))
         .withRegion(propertyConfig.getRegion())
         .build();
-  }
-
-  public AWSCredentials awsCredentialss() {
-    return new BasicAWSCredentials(propertyConfig.getS3FileAccessKey(), propertyConfig.getS3FileSecretKey());
   }
 }
