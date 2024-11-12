@@ -31,14 +31,6 @@ public class UserProfileController extends GenericController {
   }
 
 
-  @PostMapping(ApiEnum.CREATE_PROFILE)
-  public ResponseEntity<ResponseBO<Object>> createUserProfile(
-      @RequestBody UserProfileRequestDTO userProfileRequestDTO,
-      HttpServletRequest httpServletRequest) {
-    userProfileService.createUserProfile(userProfileRequestDTO);
-    return sendResponse(ConstantEnums.SUCCESSFULLY_REGISTER,
-        ResponseMessageConstant.SUCCESS, httpServletRequest);
-  }
 
   @PutMapping(ApiEnum.UPDATE_PROFILE)
   public ResponseEntity<Object> updateUserProfile(

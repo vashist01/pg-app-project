@@ -41,7 +41,7 @@ public class CommonAuthValidatorInterceptor implements HandlerInterceptor {
    * @param jwtTokenAuthService     the jwt token auth service
    * @param propertiesConfig        the properties config
    * @param tokenValidatorComponent the token validator component
-   * @param dynmoDbAuthService      the dynmo db auth service
+   * @param dynamoDbAuthService      the dynmo db auth service
    * @param userProfile             the user profile
    */
   public CommonAuthValidatorInterceptor(JwtTokenAuthService jwtTokenAuthService,
@@ -109,6 +109,7 @@ public class CommonAuthValidatorInterceptor implements HandlerInterceptor {
     }
     UserData user = readUserDataFromDynamoDb(readDynamoDbData);
     BeanUtils.copyProperties(user, userProfile);
+
     String dynamoDbMobileNumber = tokenValidatorComponent.claimsTokenData(readDynamoDbData,
         ConstantEnums.MOBILE_NUMBER.getValue());
     if (!mobileNumber.equalsIgnoreCase(dynamoDbMobileNumber)) {

@@ -18,4 +18,6 @@ public class ResponseErrorBO<T> {
   @JsonProperty("request_time")
   private String requestTime;
   private boolean success;
+  @JsonProperty("status_code")
+  private int statusCode;
 }

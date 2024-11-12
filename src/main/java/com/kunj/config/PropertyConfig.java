@@ -28,7 +28,7 @@ public class PropertyConfig {
   private final String s3ProfileImageLocation;
   private final String profileImageBucketName;
   private final String propertyImageBucketName;
-
+  private final String uploadPropertyFileLimit;
   /**
    * Instantiates a new Property config.
    *
@@ -52,13 +52,15 @@ public class PropertyConfig {
       @Value("${s3.profile.image.location}") String s3ProfileImageLocation,
       @Value("${profile.image.bucket.name}") String profileImageBucketName,
       @Value("${property.image.bucket.name}") String propertyImageBucketName,
-      AwsSecretManagerUtil awsSecretManagerUtil) {
+      AwsSecretManagerUtil awsSecretManagerUtil,
+      @Value("${upload.property.file.limit}") String uploadPropertyFileLimit) {
 
     this.verifyOtpTiemDuration = verifyOtpTimeDuration;
     this.awsSecretManagerUtil = awsSecretManagerUtil;
     this.s3ProfileImageLocation = s3ProfileImageLocation;
     this.profileImageBucketName = profileImageBucketName;
     this.propertyImageBucketName = propertyImageBucketName;
+    this.uploadPropertyFileLimit = uploadPropertyFileLimit;
 
     Map<String, String> asmProperties = awsSecretManagerUtil.getSecretKeyByActiveEnvironment(
         activeProfile);

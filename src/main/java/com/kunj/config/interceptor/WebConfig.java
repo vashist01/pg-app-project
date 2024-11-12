@@ -49,8 +49,8 @@ public class WebConfig implements WebMvcConfigurer {
     log.info("exclude path execution ");
     final String API_APTH = ApiEnum.API_VERSION;
     List<String> excludeApiPath = new ArrayList<>();
-    excludeApiPath.add(API_APTH + ApiEnum.USER_REGISTER);
-    excludeApiPath.add(API_APTH + ApiEnum.CREATE_PROFILE);
+    excludeApiPath.add(API_APTH + ApiEnum.USER_LOGIN);
+    excludeApiPath.add(API_APTH + ApiEnum.REGISTER_USER);
     excludeApiPath.add(API_APTH + ApiEnum.VERIFY_OTP);
     excludeApiPath.addAll(Arrays.stream(AUTH_WHITELIST).toList());
     return excludeApiPath;

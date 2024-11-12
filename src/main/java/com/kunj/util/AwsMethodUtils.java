@@ -4,7 +4,6 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.S3Object;
-import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.kunj.ResponseMessageConstant;
 import com.kunj.dto.response.ProfileImageResponse;
 import com.kunj.entity.ProfileImage;
@@ -26,7 +25,7 @@ public class AwsMethodUtils {
 
 
   private static final String IMAGE_PATH_PREFIX =
-      "profile-images"+ ResponseMessageConstant.DELIMITER;
+      "profile-images" + ResponseMessageConstant.DELIMITER;
 
   private final AmazonS3 s3Client;
 
@@ -42,25 +41,29 @@ public class AwsMethodUtils {
         StringUtils.hasLength(originalFilename.get()) ? originalFilename.get().trim()
             .replace(" ", "") : originalFilename);
 
-
-
-    return Pair.of(uploadImageToS3Bucket(profileImageBucketName,fileName,multipartFile) + "[" + fileName + "]", originalFilename.get());
+    return Pair.of(
+        uploadImageToS3Bucket(profileImageBucketName, fileName, multipartFile) + "[" + fileName
+            + "]", originalFilename.get());
   }
 
   public AwsMethodUtils(AmazonS3 s3Client) {
     this.s3Client = s3Client;
   }
 
-  public  String uploadImageToS3Bucket(String profileImageBucketName, String fileName,
+  public String uploadImageToS3Bucket(String profileImageBucketName, String fileName,
       MultipartFile multipartFile) {
+
     try (InputStream inputStream = multipartFile.getInputStream()) {
       ObjectMetadata objectMetadata = getObjectMetaData(multipartFile, inputStream);
-     s3Client.putObject(profileImageBucketName, fileName, inputStream, objectMetadata);
-       return  s3Client.getUrl(profileImageBucketName, fileName).toString();
+      s3Client.putObject(profileImageBucketName, fileName, inputStream, objectMetadata);
+      return s3Client.getUrl(profileImageBucketName, fileName).toString();
+
     } catch (Exception ex) {
-      LoggerUtil.printLoggerWithERROR( ResponseMessageConstant.FILE_UPLOAD_ERROR_MESSAGE,ex,fileName);
+      LoggerUtil.printLoggerWithERROR(ResponseMessageConstant.FILE_UPLOAD_ERROR_MESSAGE, ex,
+          fileName);
     }
-    throw new FileUploadException(ResponseMessageConstant.FILE_UPLOAD_ERROR_MESSAGE,ResponseMessageConstant.ERROR_CODE);
+    throw new FileUploadException(ResponseMessageConstant.FILE_UPLOAD_ERROR_MESSAGE,
+        ResponseMessageConstant.ERROR_CODE);
   }
 
   private ObjectMetadata getObjectMetaData(MultipartFile multipartFile, InputStream inputStream)
@@ -74,15 +77,15 @@ public class AwsMethodUtils {
 
   public ProfileImageResponse getProfileImageFromS3(String profileImageToS3Url,
       String profileImageBucketName) {
-    String base64String = readFileFromS3(profileImageToS3Url,profileImageBucketName);
+    String base64String = readFileFromS3(profileImageToS3Url, profileImageBucketName);
     return ProfileImageResponse.builder()
         .profileImage(base64String).build();
   }
 
 
-  public String readFileFromS3(String s3ImageUrl,String bucketName) {
-    LoggerUtil.printLoggerWithINFO("S3 image Url : {} ",s3ImageUrl);
-    try (InputStream inputStream = readFileFromS3Object(s3ImageUrl,bucketName)) {
+  public String readFileFromS3(String s3ImageUrl, String bucketName) {
+    LoggerUtil.printLoggerWithINFO("S3 image Url : {} ", s3ImageUrl);
+    try (InputStream inputStream = readFileFromS3Object(s3ImageUrl, bucketName)) {
 
       ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
       byte[] buffer = new byte[4096];
@@ -92,29 +95,32 @@ public class AwsMethodUtils {
         byteArrayOutputStream.write(buffer, 0, bytesRead);
       }
       byte[] imageBytes = byteArrayOutputStream.toByteArray();
-       return Base64.getEncoder().encodeToString(imageBytes);
+      return Base64.getEncoder().encodeToString(imageBytes);
 
     } catch (IOException e) {
-      LoggerUtil.printLoggerWithERROR(ResponseMessageConstant.FILE_TO_READ_FILE_FROM_S3_ERROR_MESSAGE,e,s3ImageUrl);
+      LoggerUtil.printLoggerWithERROR(
+          ResponseMessageConstant.FILE_TO_READ_FILE_FROM_S3_ERROR_MESSAGE, e, s3ImageUrl);
     }
     return null;
   }
 
-  private InputStream readFileFromS3Object(String s3ImageUrl,String bucketName) {
+  private InputStream readFileFromS3Object(String s3ImageUrl, String bucketName) {
     try {
-      GetObjectRequest getObjectRequest = new GetObjectRequest(bucketName,s3ImageUrl);
+      GetObjectRequest getObjectRequest = new GetObjectRequest(bucketName, s3ImageUrl);
       S3Object s3Object = s3Client.getObject(getObjectRequest);
       return s3Object.getObjectContent();
     } catch (Exception e) {
-      LoggerUtil.printLoggerWithERROR(ResponseMessageConstant.FILE_TO_READ_FILE_FROM_S3_ERROR_MESSAGE,e,s3ImageUrl);
+      LoggerUtil.printLoggerWithERROR(
+          ResponseMessageConstant.FILE_TO_READ_FILE_FROM_S3_ERROR_MESSAGE, e, s3ImageUrl);
     }
-    throw new FileUploadException(ResponseMessageConstant.FILE_TO_READ_FILE_FROM_S3_ERROR_MESSAGE,ResponseMessageConstant.ERROR_CODE);
+    throw new FileUploadException(ResponseMessageConstant.FILE_TO_READ_FILE_FROM_S3_ERROR_MESSAGE,
+        ResponseMessageConstant.ERROR_CODE);
   }
 
   public String replaceImageUrlWithS3Url(String s3ProfileImageUrl, String s3ProfileImageLocation) {
 
     if (s3ProfileImageUrl != null && s3ProfileImageUrl.contains(s3ProfileImageLocation)) {
-     return s3ProfileImageUrl.replace(s3ProfileImageLocation, "");
+      return s3ProfileImageUrl.replace(s3ProfileImageLocation, "");
     }
     return s3ProfileImageUrl;
   }

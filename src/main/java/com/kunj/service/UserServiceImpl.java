@@ -1,5 +1,6 @@
 package com.kunj.service;
 
+import com.kunj.ResponseMessageConstant;
 import com.kunj.config.PropertyConfig;
 import com.kunj.dto.request.UserDto;
 import com.kunj.dto.request.VerifyOtpDto;
@@ -34,11 +35,11 @@ public class UserServiceImpl implements UserService {
   /**
    * Instantiates a new User service.
    *
-   * @param userRepository          the user repository
-   * @param convertorUtil           the convertor util
-   * @param propertyConfig          the property config
-   * @param otpService              the otp service
-   * @param otpRepository1          the otp repository 1
+   * @param userRepository the user repository
+   * @param convertorUtil  the convertor util
+   * @param propertyConfig the property config
+   * @param otpService     the otp service
+   * @param otpRepository1 the otp repository 1
    */
   public UserServiceImpl(UserRepository userRepository,
       ConvertorUtil convertorUtil, final PropertyConfig propertyConfig,
@@ -56,13 +57,14 @@ public class UserServiceImpl implements UserService {
   @Override
   public UserResponse login(UserDto userDto) {
     log.info("User login method is being executed for mobile number: {}", userDto);
-  
+
     Optional<User> userOptional = userRepository.findByMobileNumber(userDto.getMobileNumber());
     if (userOptional.isEmpty()) {
-        throw new InValidMobileNumberException("Invalid mobile number. Please check the number you entered or register if you don't have an account.","400");
+      throw new InValidMobileNumberException(ResponseMessageConstant.INVALID_MOBILE_NUMBER,
+          ResponseMessageConstant.ERROR_CODE);
     }
     User user = userOptional.get();
-      return otpService.genrateOtp(user);
+    return otpService.genrateOtp(user);
   }
 
   @Override
@@ -72,7 +74,8 @@ public class UserServiceImpl implements UserService {
 
     Optional<Otp> optionalOtp = otpRepository.findByOtpAndMobileNumber(verifyOtp, mobileNumber);
     if (optionalOtp.isEmpty()) {
-      throw new NoDataFoundException("Otp is not matched with mobile number", "8001001");
+      throw new NoDataFoundException(ResponseMessageConstant.INVALID_OTP,
+          ResponseMessageConstant.ERROR_CODE);
     }
     LocalDateTime otpCreationTime = optionalOtp.get().getCreatedAt();
 
@@ -86,6 +89,7 @@ public class UserServiceImpl implements UserService {
       }
       return UserResponse.builder().message(ValidationEnum.OTP_EXPIRED.getMessage()).build();
     }
-    throw new NoDataFoundException("Otp is not matched with mobile number", "8001001");
+    throw new NoDataFoundException(ResponseMessageConstant.INVALID_OTP,
+        ResponseMessageConstant.ERROR_CODE);
   }
 }
