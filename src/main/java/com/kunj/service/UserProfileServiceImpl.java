@@ -1,5 +1,6 @@
 package com.kunj.service;
 
+import com.kunj.ResponseMessageConstant;
 import com.kunj.config.PropertyConfig;
 import com.kunj.dto.request.UserProfileRequestDTO;
 import com.kunj.dto.response.ProfileImageResponse;
@@ -7,6 +8,7 @@ import com.kunj.entity.ProfileImage;
 import com.kunj.entity.User;
 import com.kunj.entity.UserProfile;
 import com.kunj.exception.custome.BadCredentialsException;
+import com.kunj.exception.custome.BadRequestException;
 import com.kunj.exception.custome.InvalidException;
 import com.kunj.repository.ProfileImageRepository;
 import com.kunj.repository.UserProfileRepository;
@@ -52,16 +54,10 @@ public class UserProfileServiceImpl implements UserProfileService {
 
   @Override
   public void createUserProfile(UserProfileRequestDTO userProfileRequestDTO) {
-    log.info("Creating user profile for mobile number: {}",
-        userProfileRequestDTO.getMobileNumber());
     User user = registerUser(userProfileRequestDTO);
-
-    log.info("User registered successfully with ID: {}", user.getId());
     com.kunj.entity.UserProfile userProfileEntity = convertorUtil.convertUserProfileRequestDTOTOEntity(
         userProfileRequestDTO, user.getId(), null);
-    log.info("UserProfile entity converted from DTO for user ID: {}", user.getId());
     userProfileRepository.save(userProfileEntity);
-
   }
 
   private User registerUser(UserProfileRequestDTO userProfileRequestDTO) {
@@ -79,7 +75,7 @@ public class UserProfileServiceImpl implements UserProfileService {
       userRepository.save(user);
       return user;
     }
-    throw new BadCredentialsException("User already register with this mobile Number : ", "20001");
+    throw new InvalidException(ResponseMessageConstant.USER_ALREADY_EXIST,ResponseMessageConstant.ERROR_CODE);
 
   }
 

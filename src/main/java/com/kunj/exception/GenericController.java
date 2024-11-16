@@ -1,6 +1,5 @@
 package com.kunj.exception;
 
-import com.kunj.dto.response.ErrorBo;
 import com.kunj.dto.response.ResponseBO;
 import com.kunj.dto.response.ResponseErrorBO;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,14 +15,14 @@ public class GenericController {
       HttpServletRequest request) {
 
     return new ResponseEntity<>(ResponseBO.<T>builder().data(data).message(message)
-        .requestTime(LocalDateTime.now().toString()).success(true).build(), HttpStatus.OK);
+        .requestTime(LocalDateTime.now().toString()).success(true).statusCode(200).build(), HttpStatus.OK);
   }
 
   public <T> ResponseEntity<ResponseErrorBO<T>> sendFailure(T data, ApiErrorMessageResponse errors, int httpStatus,
       HttpServletRequest request) {
 
     return new ResponseEntity<>(ResponseErrorBO.<T>builder().data(data).errorBo(errors)
-        .requestTime(LocalDateTime.now().toString()).success(false).build(),
+        .requestTime(LocalDateTime.now().toString()).success(false).statusCode(httpStatus).build(),
         HttpStatus.OK);
   }
 }

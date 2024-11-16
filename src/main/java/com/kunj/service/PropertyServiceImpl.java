@@ -13,6 +13,7 @@ import com.kunj.entity.OwnerProperty;
 import com.kunj.entity.PropertyCategory;
 import com.kunj.entity.PropertyImage;
 import com.kunj.exception.custome.FileUploadException;
+import com.kunj.exception.custome.ValidationException;
 import com.kunj.repository.PropertyCategoryRepository;
 import com.kunj.repository.PropertyImageRepository;
 import com.kunj.repository.PropertyRepository;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -124,15 +126,9 @@ public class PropertyServiceImpl implements PropertyService {
       SearchPropertyRequestDTO searchPropertyRequestDTO) {
     Pageable pageable = PageRequest.of(searchPropertyRequestDTO.getPage(),
         searchPropertyRequestDTO.getSize());
-
-    // Fetch the paginated list of properties from the repository
     List<OwnerProperty> ownerPropertyList = propertyRepository.findAll(pageable).getContent();
-
-    // Convert the list of OwnerProperty to PropertyResponseDTO
     List<PropertyResponseDTO> propertyResponseDTOS = convertOwnerPropertyModelToResponseDTO(
         ownerPropertyList);
-
-    // Return as a Set to avoid duplicates
     return new HashSet<>(propertyResponseDTOS);
   }
 
@@ -172,43 +168,50 @@ public class PropertyServiceImpl implements PropertyService {
       List<MultipartFile> multipartFileList,
       OwnerProperty ownerProperty) {
 
-    List<PropertyImageProjection> propertyImagesList = propertyImageRepository.findByOwnerPropertyAndUserId(
-        ownerProperty, userProfile.getId());
-
-    String fileName = ResponseMessageConstant.IMAGE_PATH_PREFIX + ownerProperty.getId()
+    String fileName = ResponseMessageConstant.IMAGE_PATH_PREFIX + userProfile.getId()
+        + ResponseMessageConstant.DELIMITER + ownerProperty.getId()
         + ResponseMessageConstant.DELIMITER;
 
-    List<PropertyImage> profileImagesList = multipartFileList.stream()
-        .filter(multipartFile -> !propertyImagesList.contains(multipartFile.getOriginalFilename()))
-        .map(multipartFile -> getPropertyImage(multipartFile, fileName, ownerProperty))
-        .toList();
-    if(CollectionUtils.isEmpty(propertyImagesList)){
-      List<PropertyImage> profileImageList = propertyImageRepository.saveAll(profileImagesList);
-      return getPropertyImageResponse(profileImageList);
+    List<PropertyImage> propertyImageList = propertyImageRepository.findByOwnerProperty(
+        ownerProperty);
+    if (propertyImageList.size() == Integer.parseInt(propertyConfig.getUploadPropertyFileLimit())) {
+      throw new ValidationException(ResponseMessageConstant.FILE_UPLOAD_LIMIT_EXCEED,
+          ResponseMessageConstant.ERROR_CODE);
     }
-   return getPropertyImageIfAlreadyExist(propertyImagesList);
+    if (!CollectionUtils.isEmpty(multipartFileList)) {
+      List<PropertyImage> profileImagesList = multipartFileList.stream()
+          .map(multipartFile -> uploadProfileImageInS3IfNotExist(multipartFile, fileName,
+              ownerProperty))
+          .toList();
+      List<PropertyImage> profileImageList = propertyImageRepository.saveAll(profileImagesList);
+      return getPropertyImageResponse(ownerProperty);
+    }
+    throw new FileUploadException(ResponseMessageConstant.FILE_UPLOAD_ERROR_MESSAGE,
+        ResponseMessageConstant.ERROR_CODE);
   }
 
-  private PropertyImageResponse getPropertyImageIfAlreadyExist(List<PropertyImageProjection> propertyImagesList) {
-     PropertyImageResponse propertyImageResponse = new PropertyImageResponse();
-     List<ImageResponseDTO> imageResponseDTOS = new ArrayList<>();
-     for(PropertyImageProjection propertyImageProjection : propertyImagesList){
+  private PropertyImageResponse getPropertyImageIfAlreadyExist(
+      List<PropertyImageProjection> propertyImagesList) {
+    PropertyImageResponse propertyImageResponse = new PropertyImageResponse();
+    List<ImageResponseDTO> imageResponseDTOS = new ArrayList<>();
+    for (PropertyImageProjection propertyImageProjection : propertyImagesList) {
 
-         String url = convertPropertyImageToBase64String(propertyImageProjection.getImageUrl());
-         ImageResponseDTO imageResponseDTO = new ImageResponseDTO();
-         imageResponseDTO.setPropertyImage(url);
-       imageResponseDTOS.add(imageResponseDTO);
+      String url = convertPropertyImageToBase64String(propertyImageProjection.getImageUrl());
+      ImageResponseDTO imageResponseDTO = new ImageResponseDTO();
+      imageResponseDTO.setPropertyImage(url);
+      imageResponseDTOS.add(imageResponseDTO);
 
-     }
+    }
     propertyImageResponse.setPropertyImageList(imageResponseDTOS);
-     return propertyImageResponse;
+    return propertyImageResponse;
   }
 
-  private PropertyImageResponse getPropertyImageResponse(List<PropertyImage> profileImageList) {
-    if (CollectionUtils.isEmpty(profileImageList)) {
+  private PropertyImageResponse getPropertyImageResponse(OwnerProperty ownerProperty) {
+    List<PropertyImage> propertyImageList = propertyImageRepository.findByOwnerProperty(ownerProperty);
+    if (CollectionUtils.isEmpty(propertyImageList)) {
       return null;
     }
-    List<ImageResponseDTO> propertyImageBase64String = profileImageList.stream()
+    List<ImageResponseDTO> propertyImageBase64String = propertyImageList.stream()
         .map(this::readPropertyImageFromS3).toList();
     PropertyImageResponse propertyImageResponse = new PropertyImageResponse();
 
@@ -224,22 +227,21 @@ public class PropertyServiceImpl implements PropertyService {
         .build();
   }
 
-  private PropertyImage getPropertyImage(MultipartFile multipartFile, String fileName,
+  private PropertyImage uploadProfileImageInS3IfNotExist(MultipartFile multipartFile,
+      String fileName,
       OwnerProperty ownerProperty) {
-
-    PropertyImage profileImage = new PropertyImage();
-    String originalFileName = multipartFile.getOriginalFilename();
-    if(StringUtils.hasText(originalFileName)){
-      profileImage.setImageName(originalFileName.trim());
+    PropertyImage propertyImage = new PropertyImage();
+    if(Objects.nonNull(multipartFile) && StringUtils.hasText(multipartFile.getOriginalFilename())){
+      String originalFileName = multipartFile.getOriginalFilename().replace(" ", "");
+      propertyImage.setImageName(originalFileName);
+      String multipartFileName = fileName + originalFileName;
+      String s3Url = awsMethodUtils.uploadImageToS3Bucket(
+          propertyConfig.getProfileImageBucketName(), multipartFileName.trim(), multipartFile);
+      propertyImage.setPropertyImageUrl(s3Url);
+      propertyImage.setOwnerProperty(ownerProperty);
+      propertyImage.setUserId(userProfile.getId());
     }
-    String multipartFileName = fileName + originalFileName;
-    String s3Url = awsMethodUtils.uploadImageToS3Bucket(
-        propertyConfig.getProfileImageBucketName(), multipartFileName.trim(), multipartFile);
-
-    profileImage.setPropertyImageUrl(s3Url);
-    profileImage.setOwnerProperty(ownerProperty);
-    profileImage.setUserId(userProfile.getId());
-    return profileImage;
+    return propertyImage;
   }
 
   private List<String> getPropertyImageFromS3ByPropertyId(List<PropertyImage> propertyImages) {
