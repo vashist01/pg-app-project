@@ -11,6 +11,7 @@ import com.kunj.dto.response.ResponseBO;
 import com.kunj.enums.ApiEnum;
 import com.kunj.exception.GenericController;
 import com.kunj.service.PropertyService;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -56,6 +57,7 @@ public class PropertyController extends GenericController {
    * @param propertyRequestDTO the property request dto
    * @return the response entity
    */
+  @RolesAllowed({"OWNER","ADMIN"})
   @PostMapping(ApiEnum.API_ADD_PROPERTY)
   public ResponseEntity<ResponseBO<List<PropertyResponseDTO>>> addProperty(
       @RequestBody PropertyRequestDTO propertyRequestDTO, HttpServletRequest httpServletRequest) {

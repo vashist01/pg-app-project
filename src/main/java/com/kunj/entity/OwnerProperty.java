@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -79,4 +80,12 @@ public class OwnerProperty {
 
   @OneToMany(mappedBy = "ownerProperty", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   private List<PropertyImage> propertyImages;
+  @Column(name = "created_on")
+  private LocalDateTime createdOn;
+  @Column(name = "created_by")
+  private String createdBy;
+  @Column(name = "updated_on")
+  private LocalDateTime updatedOn;
+  @Column(name = "updated_by")
+  private String updatedBy;
 }

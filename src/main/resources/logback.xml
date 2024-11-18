@@ -1,48 +1,50 @@
-<configuration>
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true" scan="false" scanPeriod="30 seconds">
+  <property name="LOG_PATH" value="logs"/>
+  <property name="LOG_ARCHIVE" value="${LOG_PATH}/archive"/>
+  <property name="FILE_NAME" value="pg-service"/>
+  <timestamp key="timestamp-by-second" datePattern="yyyyMMdd'T'HHmmss"/>
+  <appender name="Console-Appender"
+    class="ch.qos.logback.core.ConsoleAppender">
+    <layout>
+      <pattern>[%d{yyyy-MM-dd HH:mm:ss}] [%t] %-5level %logger{36}-[%X{session.id}]-%msg%n
+      </pattern>
+    </layout>
+  </appender>
+  <appender name="File-Appender" class="ch.qos.logback.core.FileAppender">
+    <file>${LOG_PATH}/${FILE_NAME}.log</file>
+    <encoder>
+      <pattern>[%d{yyyy-MM-dd HH:mm:ss}] [%t] %-5level %logger{36}-%msg%n</pattern>
+      <outputPatternAsHeader>true</outputPatternAsHeader>
+    </encoder>
+  </appender>
+  <appender name="RollingFile-Appender"
+    class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${LOG_PATH}/${FILE_NAME}-startup.log</file>
+    <rollingPolicy
+      class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_ARCHIVE}/${FILE_NAME}-%d{yyyy-MM-dd}.log</fileNamePattern>
+      <maxHistory>10</maxHistory>
+      <totalSizeCap>10MB</totalSizeCap>
+      <cleanHistoryOnStart>true</cleanHistoryOnStart>
+    </rollingPolicy>
+    <encoder>
+      <pattern>[%d{yyyy-MM-dd HH:mm:ss}] [%t] %-5level %logger{36}-[%X{session.id}]-%msg%n
+      </pattern>
+    </encoder>
+  </appender>
 
-  <!-- Default profile: logs INFO level and higher to the console -->
-  <springProfile name="local">
-    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-      <encoder>
-        <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n</pattern>
-      </encoder>
-    </appender>
+  <appender name="Async-Appender" class="ch.qos.logback.classic.AsyncAppender">
+    <appender-ref ref="RollingFile-Appender"/>
+  </appender>
 
-    <root level="INFO">
-      <appender-ref ref="CONSOLE" />
-    </root>
-  </springProfile>
+  <logger name="com.kunj" level="info">
+    <appender-ref ref="File-Appender"/>
+  </logger>
 
-  <!-- Development profile: logs DEBUG level and higher to the console -->
-  <springProfile name="dev">
-    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-      <encoder>
-        <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n</pattern>
-      </encoder>
-    </appender>
-
-    <root level="DEBUG">
-      <appender-ref ref="CONSOLE" />
-    </root>
-  </springProfile>
-
-  <!-- Production profile: logs WARN level and higher to a file -->
-  <springProfile name="prod">
-    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-      <file>logs/app.log</file>
-      <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-        <fileNamePattern>logs/app.%d{yyyy-MM-dd}.log</fileNamePattern>
-        <maxHistory>30</maxHistory>
-      </rollingPolicy>
-      <encoder>
-        <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n</pattern>
-      </encoder>
-    </appender>
-
-    <root level="WARN">
-      <appender-ref ref="FILE" />
-    </root>
-  </springProfile>
+  <root level="INFO">
+    <appender-ref ref="Console-Appender"/>
+    <appender-ref ref="RollingFile-Appender"/>
+  </root>
 
 </configuration>
-
