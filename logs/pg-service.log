@@ -1,0 +1,32 @@
+#logback.classic pattern: [%d{yyyy-MM-dd HH:mm:ss}] [%t] %-5level %logger{36}-%msg%n
+[2024-11-18 21:44:13] [main] INFO  com.kunj.PgServiceApplication-This message will be written to the application's CloudWatch log
+#logback.classic pattern: [%d{yyyy-MM-dd HH:mm:ss}] [%t] %-5level %logger{36}-%msg%n
+[2024-11-18 21:44:13] [main] INFO  com.kunj.PgServiceApplication-Starting PgServiceApplication using Java 17.0.6 with PID 2684 (D:\pg-app-project\pg-app-project\target\classes started by Lovely Computers in D:\pg-app-project\pg-app-project)
+[2024-11-18 21:44:13] [main] INFO  com.kunj.PgServiceApplication-The following 1 profile is active: "dev"
+[2024-11-18 21:44:19] [main] INFO  com.kunj.util.AwsSecretManagerUtil- activeProfile for key dev:
+[2024-11-18 21:44:19] [main] INFO  com.kunj.util.AwsSecretManagerUtil- secret for key dev/secret-key:
+[2024-11-18 21:44:20] [main] INFO  c.kunj.service.JwtTokenAuthService-JwtTokenAuthService intialize service : PropertyConfig(verifyOtpTiemDuration=5, dnymoDbTableName=PG-LOCAL-AUTH, region=ap-south-1, jwtSecretKey=3cfa76ef14937c1c0ea519f8fc057a80fcd04a7420f8e8bcd0a7567c272e007b, accessKey=AKIAYUQGTBT6RO7K576F, secretKey=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, jwtExpiration=5, awsSecretManagerUtil=com.kunj.util.AwsSecretManagerUtil@50a1c2f3, activeProfile=null, s3ProfileImageLocation=https://pg-profile-image-bucket.s3.ap-south-1.amazonaws.com/, profileImageBucketName=pg-profile-image-bucket, propertyImageBucketName=pg-property-image-bucket, uploadPropertyFileLimit=4) 
+[2024-11-18 21:44:21] [main] INFO  com.kunj.util.StringUtils-private constructor ...... 
+[2024-11-18 21:44:21] [main] INFO  c.kunj.config.interceptor.WebConfig-exclude path execution 
+[2024-11-18 21:44:22] [main] INFO  com.kunj.PgServiceApplication-Started PgServiceApplication in 9.269 seconds (process running for 10.593)
+[2024-11-18 21:44:22] [main] INFO  c.kunj.util.components.FileUtility-read Property category ........
+[2024-11-18 21:44:22] [main] INFO  c.k.s.PropertyCategoryServiceImpl-defalut catelgory list is : [flat, room, pg] 
+[2024-11-18 21:44:22] [main] INFO  c.k.s.PropertyCategoryServiceImpl-Existing property categories: [flat, room, pg]
+[2024-11-18 21:44:22] [main] INFO  c.k.s.PropertyCategoryServiceImpl-Property category 'flat' already exists, skipping.
+[2024-11-18 21:44:22] [main] INFO  c.k.s.PropertyCategoryServiceImpl-Property category 'room' already exists, skipping.
+[2024-11-18 21:44:22] [main] INFO  c.k.s.PropertyCategoryServiceImpl-Property category 'pg' already exists, skipping.
+[2024-11-18 21:44:22] [main] INFO  c.k.s.PropertyCategoryServiceImpl-No new property categories to save.
+[2024-11-18 21:44:22] [main] INFO  c.kunj.util.components.FileUtility-Default subcategory list is : {}
+[2024-11-18 21:44:22] [main] INFO  c.kunj.util.components.FileUtility-imported subcategory file data is :: {flate=[1BHK, 2BHK, 3BHK], room=[1-RK, 2-RK, 3-RK], house=[], shop=[]}
+[2024-11-18 21:44:22] [main] INFO  c.k.s.PropertyCategoryServiceImpl-Default subcategory list is : {flate=[1BHK, 2BHK, 3BHK], room=[1-RK, 2-RK, 3-RK], house=[], shop=[]}
+[2024-11-18 21:44:22] [main] INFO  c.k.s.PropertyCategoryServiceImpl-Processing subcategories for property type: PropertyCategory(id=1, propertyType=flat, subCategorySet=[])
+[2024-11-18 21:44:22] [main] INFO  c.k.s.PropertyCategoryServiceImpl-Existing subcategories: []
+[2024-11-18 21:44:22] [main] WARN  c.k.s.PropertyCategoryServiceImpl-No subcategories to save as the subCategoryList is empty.
+[2024-11-18 21:44:22] [main] INFO  c.k.s.PropertyCategoryServiceImpl-No new subcategories to save, all provided subcategories already exist.
+[2024-11-18 21:44:22] [main] INFO  c.k.s.PropertyCategoryServiceImpl-Processing subcategories for property type: PropertyCategory(id=2, propertyType=room, subCategorySet=[])
+[2024-11-18 21:44:22] [main] INFO  c.k.s.PropertyCategoryServiceImpl-Existing subcategories: [1-RK, 2-RK, 3-RK]
+[2024-11-18 21:44:22] [main] INFO  c.k.s.PropertyCategoryServiceImpl-No new subcategories to save, all provided subcategories already exist.
+[2024-11-18 21:44:22] [main] INFO  c.k.s.PropertyCategoryServiceImpl-Processing subcategories for property type: PropertyCategory(id=3, propertyType=pg, subCategorySet=[])
+[2024-11-18 21:44:22] [main] INFO  c.k.s.PropertyCategoryServiceImpl-Existing subcategories: []
+[2024-11-18 21:44:22] [main] WARN  c.k.s.PropertyCategoryServiceImpl-No subcategories to save as the subCategoryList is empty.
+[2024-11-18 21:44:22] [main] INFO  c.k.s.PropertyCategoryServiceImpl-No new subcategories to save, all provided subcategories already exist.

@@ -1,0 +1,48 @@
+[2024-11-18 21:44:13] [main] INFO  com.kunj.PgServiceApplication-[]-This message will be written to the application's CloudWatch log
+[2024-11-18 21:44:13] [main] INFO  com.kunj.PgServiceApplication-[]-Starting PgServiceApplication using Java 17.0.6 with PID 2684 (D:\pg-app-project\pg-app-project\target\classes started by Lovely Computers in D:\pg-app-project\pg-app-project)
+[2024-11-18 21:44:13] [main] INFO  com.kunj.PgServiceApplication-[]-The following 1 profile is active: "dev"
+[2024-11-18 21:44:15] [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate-[]-Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+[2024-11-18 21:44:15] [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate-[]-Finished Spring Data repository scanning in 114 ms. Found 9 JPA repository interfaces.
+[2024-11-18 21:44:16] [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer-[]-Tomcat initialized with port 8000 (http)
+[2024-11-18 21:44:16] [main] INFO  o.a.coyote.http11.Http11NioProtocol-[]-Initializing ProtocolHandler ["http-nio-8000"]
+[2024-11-18 21:44:16] [main] INFO  o.a.catalina.core.StandardService-[]-Starting service [Tomcat]
+[2024-11-18 21:44:16] [main] INFO  o.a.catalina.core.StandardEngine-[]-Starting Servlet engine: [Apache Tomcat/10.1.30]
+[2024-11-18 21:44:16] [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/]-[]-Initializing Spring embedded WebApplicationContext
+[2024-11-18 21:44:16] [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext-[]-Root WebApplicationContext: initialization completed in 2596 ms
+[2024-11-18 21:44:17] [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo-[]-No LoadTimeWeaver setup: ignoring JPA class transformer
+[2024-11-18 21:44:17] [main] INFO  com.zaxxer.hikari.HikariDataSource-[]-HikariPool-1 - Starting...
+[2024-11-18 21:44:17] [main] INFO  com.zaxxer.hikari.pool.HikariPool-[]-HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@49f41c2e
+[2024-11-18 21:44:17] [main] INFO  com.zaxxer.hikari.HikariDataSource-[]-HikariPool-1 - Start completed.
+[2024-11-18 21:44:19] [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean-[]-Initialized JPA EntityManagerFactory for persistence unit 'default'
+[2024-11-18 21:44:19] [main] INFO  com.kunj.util.AwsSecretManagerUtil-[]- activeProfile for key dev:
+[2024-11-18 21:44:19] [main] INFO  com.kunj.util.AwsSecretManagerUtil-[]- secret for key dev/secret-key:
+[2024-11-18 21:44:20] [main] INFO  c.kunj.service.JwtTokenAuthService-[]-JwtTokenAuthService intialize service : PropertyConfig(verifyOtpTiemDuration=5, dnymoDbTableName=PG-LOCAL-AUTH, region=ap-south-1, jwtSecretKey=3cfa76ef14937c1c0ea519f8fc057a80fcd04a7420f8e8bcd0a7567c272e007b, accessKey=AKIAYUQGTBT6RO7K576F, secretKey=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, jwtExpiration=5, awsSecretManagerUtil=com.kunj.util.AwsSecretManagerUtil@50a1c2f3, activeProfile=null, s3ProfileImageLocation=https://pg-profile-image-bucket.s3.ap-south-1.amazonaws.com/, profileImageBucketName=pg-profile-image-bucket, propertyImageBucketName=pg-property-image-bucket, uploadPropertyFileLimit=4) 
+[2024-11-18 21:44:20] [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory-[]-Hibernate is in classpath; If applicable, HQL parser will be used.
+[2024-11-18 21:44:21] [main] INFO  com.kunj.util.StringUtils-[]-private constructor ...... 
+[2024-11-18 21:44:21] [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration-[]-spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+[2024-11-18 21:44:21] [main] INFO  c.kunj.config.interceptor.WebConfig-[]-exclude path execution 
+[2024-11-18 21:44:22] [main] INFO  o.s.b.a.e.web.EndpointLinksResolver-[]-Exposing 15 endpoints beneath base path '/actuator'
+[2024-11-18 21:44:22] [main] INFO  o.a.coyote.http11.Http11NioProtocol-[]-Starting ProtocolHandler ["http-nio-8000"]
+[2024-11-18 21:44:22] [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer-[]-Tomcat started on port 8000 (http) with context path '/'
+[2024-11-18 21:44:22] [main] INFO  com.kunj.PgServiceApplication-[]-Started PgServiceApplication in 9.269 seconds (process running for 10.593)
+[2024-11-18 21:44:22] [main] INFO  c.kunj.util.components.FileUtility-[]-read Property category ........
+[2024-11-18 21:44:22] [main] INFO  c.k.s.PropertyCategoryServiceImpl-[]-defalut catelgory list is : [flat, room, pg] 
+[2024-11-18 21:44:22] [main] INFO  c.k.s.PropertyCategoryServiceImpl-[]-Existing property categories: [flat, room, pg]
+[2024-11-18 21:44:22] [main] INFO  c.k.s.PropertyCategoryServiceImpl-[]-Property category 'flat' already exists, skipping.
+[2024-11-18 21:44:22] [main] INFO  c.k.s.PropertyCategoryServiceImpl-[]-Property category 'room' already exists, skipping.
+[2024-11-18 21:44:22] [main] INFO  c.k.s.PropertyCategoryServiceImpl-[]-Property category 'pg' already exists, skipping.
+[2024-11-18 21:44:22] [main] INFO  c.k.s.PropertyCategoryServiceImpl-[]-No new property categories to save.
+[2024-11-18 21:44:22] [main] INFO  c.kunj.util.components.FileUtility-[]-Default subcategory list is : {}
+[2024-11-18 21:44:22] [main] INFO  c.kunj.util.components.FileUtility-[]-imported subcategory file data is :: {flate=[1BHK, 2BHK, 3BHK], room=[1-RK, 2-RK, 3-RK], house=[], shop=[]}
+[2024-11-18 21:44:22] [main] INFO  c.k.s.PropertyCategoryServiceImpl-[]-Default subcategory list is : {flate=[1BHK, 2BHK, 3BHK], room=[1-RK, 2-RK, 3-RK], house=[], shop=[]}
+[2024-11-18 21:44:22] [main] INFO  c.k.s.PropertyCategoryServiceImpl-[]-Processing subcategories for property type: PropertyCategory(id=1, propertyType=flat, subCategorySet=[])
+[2024-11-18 21:44:22] [main] INFO  c.k.s.PropertyCategoryServiceImpl-[]-Existing subcategories: []
+[2024-11-18 21:44:22] [main] WARN  c.k.s.PropertyCategoryServiceImpl-[]-No subcategories to save as the subCategoryList is empty.
+[2024-11-18 21:44:22] [main] INFO  c.k.s.PropertyCategoryServiceImpl-[]-No new subcategories to save, all provided subcategories already exist.
+[2024-11-18 21:44:22] [main] INFO  c.k.s.PropertyCategoryServiceImpl-[]-Processing subcategories for property type: PropertyCategory(id=2, propertyType=room, subCategorySet=[])
+[2024-11-18 21:44:22] [main] INFO  c.k.s.PropertyCategoryServiceImpl-[]-Existing subcategories: [1-RK, 2-RK, 3-RK]
+[2024-11-18 21:44:22] [main] INFO  c.k.s.PropertyCategoryServiceImpl-[]-No new subcategories to save, all provided subcategories already exist.
+[2024-11-18 21:44:22] [main] INFO  c.k.s.PropertyCategoryServiceImpl-[]-Processing subcategories for property type: PropertyCategory(id=3, propertyType=pg, subCategorySet=[])
+[2024-11-18 21:44:22] [main] INFO  c.k.s.PropertyCategoryServiceImpl-[]-Existing subcategories: []
+[2024-11-18 21:44:22] [main] WARN  c.k.s.PropertyCategoryServiceImpl-[]-No subcategories to save as the subCategoryList is empty.
+[2024-11-18 21:44:22] [main] INFO  c.k.s.PropertyCategoryServiceImpl-[]-No new subcategories to save, all provided subcategories already exist.
